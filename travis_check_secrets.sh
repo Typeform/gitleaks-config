@@ -8,8 +8,8 @@ final_config='gitleaks_config.toml'
 gitleaks_container="$DOCKER_REGISTRY/typeform/gitleaks"
 
 # Copy the project specific .secretsignore file
-if [ -f ../$TRAVIS_REPO_SLUG/$secretsignore ]; then
-    cp ../$TRAVIS_REPO_SLUG/$secretsignore .
+if [ -f ../$secretsignore ]; then
+    cp ../$secretsignore .
 else
     touch $secretsignore
 fi
