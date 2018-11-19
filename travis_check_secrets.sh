@@ -7,6 +7,9 @@ secretsignore='.secretsignore'
 final_config='gitleaks_config.toml'
 gitleaks_container="$DOCKER_REGISTRY/typeform/gitleaks"
 
+# Move to the gitleaks-config directory
+cd "$(dirname "$0")"
+
 # Copy the project specific .secretsignore file
 if [ -f ../$secretsignore ]; then
     cp ../$secretsignore .
