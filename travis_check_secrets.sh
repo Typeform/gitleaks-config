@@ -10,17 +10,19 @@ gitleaks_container="$DOCKER_REGISTRY/typeform/gitleaks"
 # Move to the gitleaks-config directory
 cd "$(dirname "$0")"
 
-# Copy the project specific .secretsignore file
 if [ -f ../$secretsignore ]; then
+    # Copy the project specific .secretsignore file
     cp ../$secretsignore .
-else
-    touch $secretsignore
-fi
 
-# Generate the final gitleaks config file that contains both the global config
-# and the repository config.
-make build
-docker container run --rm -v $PWD/$secretsignore:/app/$secretsignore gitleaks-config > $final_config
+    # Generate the final gitleaks config file that contains both the global config
+    # and the repository config.
+    make build
+    docker container run --rm -v $PWD/$secretsignore:/app/$secretsignore gitleaks-config > $final_config
+else
+    # When the .secretsignore file doesn't exists, we only have to use the
+    # global config.
+    cp global_config.toml $final_config
+fi
 
 # Download the gitleaks container. Login to the docker registry must be done
 # in the before_install step of Travis
