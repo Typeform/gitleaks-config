@@ -34,8 +34,7 @@ regexes = [
 files = [
     "(.*?)(jpg|gif|doc|pdf|bin)$",
     "node_modules/*",
-    "vendor/*",
-    "gitleaks.toml",
+    ".secretsignore",
 ]
 commits = [
 ]
