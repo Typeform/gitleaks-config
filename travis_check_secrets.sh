@@ -7,21 +7,13 @@ secretsignore='.secretsignore'
 final_config='gitleaks_config.toml'
 gitleaks_container="$DOCKER_REGISTRY/typeform/gitleaks"
 
-# Move to the gitleaks-config directory
-cd "$(dirname "$0")"
-
-if [ -f ../$secretsignore ]; then
-    # Copy the project specific .secretsignore file
-    cp ../$secretsignore .
-
+if [ -f ./$secretsignore ]; then
     # Generate the final gitleaks config file that contains both the global config
     # and the repository config.
-    make build
-    docker container run --rm -v $PWD/$secretsignore:/app/$secretsignore gitleaks-config > $final_config
+    docker container run --rm -v $PWD/$secretsignore:/app/$secretsignore gitleaks-config \
+           python gitleaks_config_generator.py > $final_config
 else
-    # When the .secretsignore file doesn't exists, we only have to use the
-    # global config.
-    cp global_config.toml $final_config
+    docker container run --rm gitleaks-config python gitleaks_config_generator.py > $final_config
 fi
 
 # Download the gitleaks container. Login to the docker registry must be done
@@ -33,4 +25,3 @@ docker container run --rm --name=gitleaks -e GITHUB_TOKEN=$GITLEAKS_GITHUB_ACCES
     -v $PWD/$final_config:/tmp/$final_config \
     $gitleaks_container --github-pr=https://github.com/$TRAVIS_REPO_SLUG/pull/$TRAVIS_PULL_REQUEST \
                         --config=/tmp/$final_config --verbose
-
