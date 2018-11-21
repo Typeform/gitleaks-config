@@ -24,4 +24,4 @@ docker pull $gitleaks_container:latest
 docker container run --rm --name=gitleaks -e GITHUB_TOKEN=$GITLEAKS_GITHUB_ACCESS_TOKEN \
     -v $PWD/$final_config:/tmp/$final_config \
     $gitleaks_container --github-pr=https://github.com/$TRAVIS_REPO_SLUG/pull/$TRAVIS_PULL_REQUEST \
-                        --config=/tmp/$final_config --verbose
+                        --config=/tmp/$final_config --verbose --redact
