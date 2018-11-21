@@ -2,8 +2,8 @@
 
 This script reads the gitleaks global config which contains the regexes of the
 secrets we look for and common whitelist for all the projects. Then, it reads
-the .secretsignore file of a specific project which contains the known secrets
-that should be ignored and any specific whitelisting rule. Finally, it merges
+the .gitleaks.toml file of a specific project which contains the known secrets
+that should be ignored and any other project specific rule. Finally, it merges
 the two config files to create the final one that will be passed to gitleaks.
 """
 
@@ -15,22 +15,22 @@ import toml
 
 
 def main():
-    final_config = get_final_config('global_config.toml', '.secretsignore')
+    final_config = get_final_config('global_config.toml', '.gitleaks.toml')
     print(toml.dumps(final_config))
 
 
-def get_final_config(global_config_path, secretsignore_path):
-    if secretsignore_path != '' and Path(secretsignore_path).exists():
-        final_config = merge_config(global_config_path, secretsignore_path)
+def get_final_config(global_config_path, local_config_path):
+    if local_config_path != '' and Path(local_config_path).exists():
+        final_config = merge_config(global_config_path, local_config_path)
         return final_config
     else:
         global_config = open_toml(global_config_path)
         return global_config
 
 
-def merge_config(global_config_path, secretsignore_path):
+def merge_config(global_config_path, local_config_path):
     global_config = open_toml(global_config_path)
-    repo_config = open_toml(secretsignore_path)
+    repo_config = open_toml(local_config_path)
     final_config = copy.deepcopy(global_config)
 
     for section, values in repo_config["whitelist"].items():

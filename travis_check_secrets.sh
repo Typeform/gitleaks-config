@@ -3,14 +3,14 @@
 # This script is supposed to be run from a travis build to check for secrets
 # on pull requests.
 
-secretsignore='.secretsignore'
+local_config='.gitleaks.toml'
 final_config='gitleaks_config.toml'
 gitleaks_container="$DOCKER_REGISTRY/typeform/gitleaks"
 
-if [ -f ./$secretsignore ]; then
+if [ -f ./$local_config ]; then
     # Generate the final gitleaks config file that contains both the global config
     # and the repository config.
-    docker container run --rm -v $PWD/$secretsignore:/app/$secretsignore gitleaks-config \
+    docker container run --rm -v $PWD/$local_config:/app/$local_config gitleaks-config \
            python gitleaks_config_generator.py > $final_config
 else
     docker container run --rm gitleaks-config python gitleaks_config_generator.py > $final_config
