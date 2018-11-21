@@ -5,15 +5,17 @@
 
 local_config='.gitleaks.toml'
 final_config='gitleaks_config.toml'
+gitleaks_config_container="$DOCKER_REGISTRY/typeform/gitleaks-config"
 gitleaks_container="$DOCKER_REGISTRY/typeform/gitleaks"
 
 if [ -f ./$local_config ]; then
     # Generate the final gitleaks config file that contains both the global config
     # and the repository config.
-    docker container run --rm -v $PWD/$local_config:/app/$local_config gitleaks-config \
-           python gitleaks_config_generator.py > $final_config
+    docker container run --rm -v $PWD/$local_config:/app/$local_config \
+        $gitleaks_config_container python gitleaks_config_generator.py > $final_config
 else
-    docker container run --rm gitleaks-config python gitleaks_config_generator.py > $final_config
+    docker container run --rm $gitleaks_config_container \
+        python gitleaks_config_generator.py > $final_config
 fi
 
 # Download the gitleaks container. Login to the docker registry must be done
