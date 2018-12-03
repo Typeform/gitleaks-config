@@ -27,3 +27,8 @@ docker container run --rm --name=gitleaks -e GITHUB_TOKEN=$GITLEAKS_GITHUB_ACCES
     -v $PWD/$final_config:/tmp/$final_config \
     $gitleaks_container --github-pr=https://github.com/$TRAVIS_REPO_SLUG/pull/$TRAVIS_PULL_REQUEST \
                         --config=/tmp/$final_config --verbose --redact
+
+# Autoremove this script when it finishes and maintain the exit code of the
+# gitleaks run
+exit_code=$?
+trap "rm -f $0; exit $exit_code;" EXIT
