@@ -1,5 +1,10 @@
 #!/bin/sh
 
+if [ ! -z $DISABLE_SECRET_SCANS ] &&  $DISABLE_SECRET_SCANS == 'true'; then
+    echo "Secret scans are disabled. To enable them back, set the environment variable DISABLE_SECRET_SCANS to 'false'"
+    exit 0
+fi
+
 # This script is supposed to be run from a travis build to check for secrets
 # on pull requests.
 
