@@ -33,10 +33,17 @@ def merge_config(global_config_path, local_config_path):
     repo_config = open_toml(local_config_path)
     final_config = copy.deepcopy(global_config)
 
-    for section, values in repo_config["whitelist"].items():
+    # Making the script backwards compatible with local configs that use
+    # the previous config file format
+    if "whitelist" in repo_config:
+        allowlist_key = "whitelist"
+    else:
+        allowlist_key = "allowlist"
+
+    for section, values in repo_config[allowlist_key].items():
         for value in values:
-            if value not in final_config["whitelist"][section]:
-                final_config["whitelist"][section].append(value)
+            if value not in final_config["allowlist"][section]:
+                final_config["allowlist"][section].append(value)
 
     return final_config
 

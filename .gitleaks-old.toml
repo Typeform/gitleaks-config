@@ -1,6 +1,6 @@
 # This file is only used to test the python script
 
-[allowlist]
+[whitelist]
 regexes = [
     "AKIALALEMEL33243OLIA",
     "AKIALALEMEL38243OLIAE",

@@ -1,4 +1,6 @@
 .git/
 __pycache__/
 .gitleaks.toml
+.gitleaks-old.toml
 *.pyc
+.vscode/
