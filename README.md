@@ -10,8 +10,14 @@ This repository contains three things:
 
 There are different make tasks:
 
-`make`: builds the docker image and runs the docker container
-`make build`: builds the docker image
-`make run`: runs the docker container
-`make test`: runs tests in the docker container
+* `make`: builds the docker image and runs the docker container
+* `make build`: builds the docker image
+* `make run`: runs the docker container
+* `make test`: runs tests in the docker container
 
+# How to upload a new image to Quay.io
+
+1. Build the image locally and give it a representative tag name: `docker build -t gitleaks-config:march-20 .`
+2. Identify the Image ID of the newly created image: `docker images`
+3. Tag the newly created image: `docker tag <IMAGE_ID> quay.io/typeform/gitleaks-config:<version>`
+4. Push it to the image repository: `docker push quay.io/typeform/gitleaks-config`
