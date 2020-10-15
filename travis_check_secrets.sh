@@ -28,9 +28,9 @@ fi
 docker pull $gitleaks_container:latest
 
 # Look for secrets in the PR
-docker container run --rm --name=gitleaks -e GITHUB_TOKEN=$GITLEAKS_GITHUB_ACCESS_TOKEN \
-    -v $PWD/$final_config:/tmp/$final_config \
-    $gitleaks_container --github-pr=https://github.com/$TRAVIS_REPO_SLUG/pull/$TRAVIS_PULL_REQUEST \
+docker container run --rm --name=gitleaks -v $PWD/$final_config:/tmp/$final_config \
+    $gitleaks_container --host=Github --pr=https://github.com/$TRAVIS_REPO_SLUG/pull/$TRAVIS_PULL_REQUEST \
+                        --access-token=$GITLEAKS_GITHUB_ACCESS_TOKEN \
                         --config=/tmp/$final_config --verbose --redact
 
 # Autoremove this script when it finishes and maintain the exit code of the
