@@ -113,9 +113,9 @@ title = "Global gitleaks config"
 	tags = ["key", "twilio"]
 [[rules]]
     description = "Hardcoded credentials"
-    regex = '''(?:secret|api|key|signature|password|pwd|pass|token)(.{0,20})['|"]([0-9a-zA-Z-._{}$\/\+=]{20,120})['|"]'''
+    regex = "(?i)(?:secret|api|key|signature|password|pwd|pass|token)(.{0,20})['|\"](.{10,120})['|\"]"
     tags = ["credentials", "hardcoded"]
     [[rules.Entropies]]
-        Min = "4.5"
+        Min = "3"
         Max = "7"
         Group = "2"
