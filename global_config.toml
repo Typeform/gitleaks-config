@@ -8,6 +8,7 @@ title = "Global gitleaks config"
     '''vendor\.json''',
     '''Gopkg\.(lock|toml)''',
     '''package-lock.json''',
+    '''yarn.lock''',
     '''node_modules\/(.*)''']
     regexes = ['''test''']
 
