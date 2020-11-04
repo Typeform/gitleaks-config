@@ -3,14 +3,14 @@ title = "Global gitleaks config"
 [allowlist]
 	description = "Allowlisted files"
 	files = ['''^\.?gitleaks.toml$''',
-	'''(.*?)(jpg|gif|doc|pdf|bin)$''',
-	'''(go.mod|go.sum)$''',
-    '''vendor\.json''',
-    '''Gopkg\.(lock|toml)''',
-    '''package-lock.json''',
-    '''yarn.lock''',
-    '''node_modules\/(.*)''']
-    regexes = ['''test''']
+		'''(.*?)(jpg|gif|doc|pdf|bin)$''',
+		'''(go.mod|go.sum)$''',
+		'''vendor\.json''',
+		'''Gopkg\.(lock|toml)''',
+		'''package-lock.json''',
+		'''yarn.lock''']
+	paths = ["node_modules"]
+	regexes = ['''test''']
 
 [[rules]]
 	description = "AWS Manager ID"
