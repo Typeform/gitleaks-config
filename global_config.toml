@@ -145,7 +145,7 @@ title = "Global gitleaks config"
 	# characters enclosed between literals ("" or '' or `` or ||). If the group of enclosed characters
 	# has an entropy of more than 3 bits the rule will trigger.
 	description = "Hardcoded credentials"
-	regex = "(?i)(?:secret|key|signature|password|pwd|pass|token)(?:.{0,20})(?:=|\:=|\|){1}(?:.{0,4})["'`|](.{4,120})["'`|]"
+	regex = '''(?i)(?:secret|key|signature|password|pwd|pass|token)(?:.{0,20})(?:=|:=|\|){1}(?:.{0,4})[\"'`|](.{4,120})[\"'`|]'''
 	tags = ["credentials", "hardcoded"]
 	[[rules.Entropies]]
 		Min = "3"
