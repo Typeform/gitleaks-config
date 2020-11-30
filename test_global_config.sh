@@ -1,5 +1,5 @@
 #!/bin/sh
-
+set -e
 # Run gitleaks on each file of the given directory $1
 # $2 is the value of the expected exit code of gitleaks execution (i.e. secrets detection expected or not)
 # $3 is the error message to be shown when gitleaks' exit code is different than expected
@@ -45,7 +45,7 @@ docker container run --rm $gitleaks_config_container \
     python gitleaks_config_generator.py > $final_config
 
 tests_failed=0
-
+set +e
 # Run tests expecting to detect a secret
 code_with_secrets_dir="${PWD}/test_data/secrets"
 run_tests ${code_with_secrets_dir} 1 "Expecting to detect secrets in"
