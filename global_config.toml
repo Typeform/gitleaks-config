@@ -138,15 +138,72 @@ title = "Global gitleaks config"
 	regex = '''(?i)twilio(.{0,20})?SK[0-9a-f]{32}'''
 	tags = ["key", "twilio"]
 
+# The following rules check for credentials assigned to variables that its value has an entropy of more than 3 bits.
+# To achieve this there's a regexp for each language. The regexp checks for a variable with a suspicious name followed
+# by a value assignation (for example, := in Go, = in JS, etc.). Then, looks for a group of non-space characters enclosed
+# between quotes. If that group has an entropy higher than 3 bits the rule will trigger.
+
 [[rules]]
-	# This rule checks for credentials assigned to variables that have an entropy of more than 3 bits.
-	# To achieve this there is a regexp that checks for a variable with a suspicious name followed by
-	# an assignation (:= for Go, = for JS, Java, etc., and | for YAML). Then, looks for a group of
-	# characters enclosed between literals ("" or '' or `` or ||). If the group of enclosed characters
-	# has an entropy of more than 3 bits the rule will trigger.
-	description = "Hardcoded credentials"
-	regex = '''(?i)(?:secret|key|signature|password|pwd|pass|token)(?:.{0,20})(?:=|:=|\|){1}(?:.{0,4})[\"'`|](.{4,120})[\"'`|]'''
-	tags = ["credentials", "hardcoded"]
+	description = "Hardcoded credentials in Go files"
+	file = '''^(.*?)\.go$'''
+	regex = '''(?i)(?:secret|key|signature|password|pwd|pass|token)(?:.{0,20})(?:=|:=){1}(?:.{0,10})[\"'`](.{4,120})[\"'`]'''
+	tags = ["credentials", "hardcoded", "go"]
+	[[rules.Entropies]]
+		Min = "3"
+		Max = "7"
+		Group = "1"
+	[rules.allowlist]
+		description = "Skip Go test files"
+		files = ['''^(.*?)_test\.go$''']
+
+[[rules]]
+	description = "Hardcoded credentials in JavaScript files"
+	file = '''^(.*?)\.js$'''
+	regex = '''(?i)(?:secret|key|signature|password|pwd|pass|token)(?:.{0,20})(?:=){1}(?:\s{0,10})[\"'`](.{4,120})[\"'`]'''
+	tags = ["credentials", "hardcoded", "js"]
+	[[rules.Entropies]]
+		Min = "3"
+		Max = "7"
+		Group = "1"
+	[rules.allowlist]
+		description = "Skip JavaScript test files"
+		files = ['''^(.*?)\.spec\.js$''']
+
+[[rules]]
+	description = "Hardcoded credentials in PHP files"
+	file = '''^(.*?)\.php$'''
+	regex = '''(?i)(?:secret|key|signature|password|pwd|pass|token)(?:.{0,20})(?:=){1}(?:.{0,10})[\"'`](.{4,120})[\"'`]'''
+	tags = ["credentials", "hardcoded", "php"]
+	[[rules.Entropies]]
+		Min = "3"
+		Max = "7"
+		Group = "1"
+
+[[rules]]
+	description = "Hardcoded credentials in YAML files as quoted strings"
+	file = '''^(.*?)\.y(a|)ml$'''
+	regex = '''(?i)(?:secret|key|signature|password|pwd|pass|token)(?:.{0,20})(?::){1}(?:\s{0,10})(?:[\"'](.{4,120})[\"'])'''
+	tags = ["credentials", "hardcoded", "yaml"]
+	[[rules.Entropies]]
+		Min = "3"
+		Max = "7"
+		Group = "1"
+
+[[rules]]
+	description = "Hardcoded credentials in YAML files as unquoted strings"
+	file = '''^(.*?)\.y(a|)ml$'''
+	regex = '''(?i)(?:secret|key|signature|password|pwd|pass|token)(?:.{0,20})(?::){1}(?:\s{0,10})(\S{4,120})'''
+	tags = ["credentials", "hardcoded", "yaml"]
+	[[rules.Entropies]]
+		Min = "3.5" # A higher entropy is required for this type of match, as unquoted can trigger many false positives
+		Max = "7"
+		Group = "1"
+
+[[rules]]
+	description = "Hardcoded credentials in YAML files as multiline strings"
+	file = '''^(.*?)\.y(a|)ml$'''
+	regex = '''(?i)(?:secret|key|signature|password|pwd|pass|token)(?:.{0,20})(?::){1}(?:\s{0,10})(?:\|(?:-|))\n(?:\s{0,10})(\S{4,120})'''
+	tags = ["credentials", "hardcoded", "yaml"]
 	[[rules.Entropies]]
 		Min = "3"
 		Max = "7"
