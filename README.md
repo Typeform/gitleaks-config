@@ -1,6 +1,6 @@
 # Gitleaks Config
 
-This repository contains three things:
+The main elements of this repository are:
 
 1. `global_config.toml`: The global configuration we use as a base to run https://github.com/zricethezav/gitleaks
 2. `gitleaks_config_generator`: A python script to merge our global configuration with a project's specific configuration
@@ -8,12 +8,22 @@ This repository contains three things:
 
 # How to work with the script
 
-There are different make tasks:
+There are different `make` tasks:
 
 * `make`: builds the docker image and runs the docker container
 * `make build`: builds the docker image
 * `make run`: runs the docker container
 * `make test`: runs tests in the docker container
+
+# Tests
+
+There are two `make` tasks that perform some tests.
+
+`make test-config-generator` validates that a correct `gitleaks` configuration is generated when trying to merge the base one with a custom one. Repos might have custom `gitleaks` configurations to avoid false positives.
+
+`make test-gitleaks-config` runs `gitleaks` with the base configuration against all the files in `test_data/`. This ensures that any change in `global_config.toml` does not produce false positives or false negatives.
+
+Both test tasks are run in this repo's Travis job.
 
 # How to upload a new image to Quay.io
 
