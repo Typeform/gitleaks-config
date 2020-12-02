@@ -6,4 +6,5 @@ $b = "Hello ";
 $b .= "There!"; // sets $b to "Hello There!", just like $b = $b . "There!";
 
 $pwd = "CjbgVD6a";
+$secret = 'CjbgVD6a';
 ?>
