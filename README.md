@@ -1,5 +1,9 @@
 # Gitleaks Config
 
+[![Build Status](https://travis-ci.com/Typeform/gitleaks-config.svg?token=yNnzzMHbo4uzYqW2rzMB&branch=master)](https://travis-ci.com/Typeform/gitleaks-config)
+[![Docker Image](https://img.shields.io/badge/quay.io-docker%20image-blue?logo=docker)](https://quay.io/repository/typeform/gitleaks-config)
+[![Security](https://img.shields.io/badge/slack-%23security__operations-blue.svg?logo=slack)](https://typeform.slack.com/archives/CCWDN8ASJ)
+
 The main elements of this repository are:
 
 1. `global_config.toml`: The global configuration we use as a base to run https://github.com/zricethezav/gitleaks
