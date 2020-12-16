@@ -25,7 +25,7 @@ There are two `make` tasks that perform some tests.
 
 `make test-config-generator` validates that a correct `gitleaks` configuration is generated when trying to merge the base one with a custom one. Repos might have custom `gitleaks` configurations to avoid false positives.
 
-`make test-gitleaks-config` runs `gitleaks` with the base configuration against all the files in `test_data/`. This ensures that any change in `global_config.toml` does not produce false positives or false negatives.
+`make test-gitleaks-config` runs `gitleaks` with the base configuration against all the files in `test_data/`. This ensures that any change in `global_config.toml` does not produce false positives or false negatives. The script `test_global_config.sh` will run `gitleaks` on every file in `test_data/secrets` and expect to detect secrets. Also, it will run `gitleaks` on every file in `test_data/no_secrets` and expect to not find any secret.
 
 Both test tasks are run in this repo's Travis job.
 
