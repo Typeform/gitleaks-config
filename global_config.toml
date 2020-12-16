@@ -185,9 +185,12 @@ title = "Global gitleaks config"
 	regex = '''(?i)(?:secret|key|signature|password|pwd|pass|token)(?:.{0,20})(?::){1}(?:\s{0,10})(?:[\"'](.{4,120})[\"'])'''
 	tags = ["credentials", "hardcoded", "yaml"]
 	[[rules.Entropies]]
-		Min = "4"
+		Min = "3"
 		Max = "7"
 		Group = "1"
+	[rules.allowlist]
+		description = "Skip YAML Serverless variables"
+		regexes = ['''\${(?:.)+}''']
 
 [[rules]]
 	description = "Hardcoded credentials in YAML files as unquoted strings"
@@ -195,9 +198,12 @@ title = "Global gitleaks config"
 	regex = '''(?i)(?:secret|key|signature|password|pwd|pass|token)(?:.{0,20})(?::){1}(?:\s{0,10})(\S{4,120})'''
 	tags = ["credentials", "hardcoded", "yaml"]
 	[[rules.Entropies]]
-		Min = "4.5" # A higher entropy is required for this type of match, as unquoted can trigger many false positives
+		Min = "3.5" # A higher entropy is required for this type of match, as unquoted can trigger many false positives
 		Max = "7"
 		Group = "1"
+	[rules.allowlist]
+		description = "Skip YAML Serverless variables"
+		regexes = ['''\${(?:.)+}''']
 
 [[rules]]
 	description = "Hardcoded credentials in YAML files as multiline strings"
