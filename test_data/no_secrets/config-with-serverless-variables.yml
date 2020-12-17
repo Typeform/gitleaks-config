@@ -1,0 +1,14 @@
+foo-access-key: "foo"
+bar-access-key: 'foo'
+baz-access-key: foo
+foo-secret-access-key: "bar"
+bar-secret-access-key: 'bar'
+baz-secret-access-key: bar
+# Serverless Variables
+AWS_ACCESS_KEY_ID: ${file(env.${env:ENVIRONMENT}.yml):aws-access-key, ''}
+AWS_ENDPOINT: ${file(env.${env:ENVIRONMENT}.yml):aws-endpoint, ''}
+AWS_REGION: ${file(env.${env:ENVIRONMENT}.yml):aws-region, 'us-east-1'}
+AWS_SECRET_ACCESS_KEY: ${file(env.${env:ENVIRONMENT}.yml):aws-secret-access-key, ''}
+DYNAMODB_MIGRATIONS_ENABLED: ${file(env.${env:ENVIRONMENT}.yml):dynamodb-migrations-enabled, false}
+DYNAMODB_TABLE_NAME: ${file(env.${env:ENVIRONMENT}.yml):dynamodb-table-name}
+FORMS_API_URL: ${file(env.${env:ENVIRONMENT}.yml):forms-api-url}
