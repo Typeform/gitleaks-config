@@ -5,6 +5,12 @@ if [ ! -z $DISABLE_SECRET_SCANS ] &&  $DISABLE_SECRET_SCANS == 'true'; then
     exit 0
 fi
 
+# Check if all required environment variables are present
+if [ -z $DOCKER_REGISTRY ] || [ -z $GH_TOKEN ]; then
+    echo "Required environment variables missing"
+    exit 2
+fi
+
 # This script is supposed to be run from a travis build to check for secrets
 # on pull requests.
 
@@ -34,7 +40,7 @@ echo "Starting secrets scan with gitleaks ${gitleaks_version}"
 # Look for secrets in the PR
 docker container run --rm --name=gitleaks -v $PWD/$final_config:/tmp/$final_config \
     $gitleaks_container --host=Github --pr=https://github.com/$TRAVIS_REPO_SLUG/pull/$TRAVIS_PULL_REQUEST \
-                        --access-token=$GITLEAKS_GITHUB_ACCESS_TOKEN \
+                        --access-token=$GH_TOKEN \
                         --config=/tmp/$final_config --verbose --redact
 
 # Maintain the exit code of the gitleaks run
