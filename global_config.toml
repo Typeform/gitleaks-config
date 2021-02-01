@@ -10,7 +10,7 @@ title = "Global gitleaks config"
 		'''package-lock\.json''', # Ignoring Node/JS manifests
 		'''package\.json''',
 		'''yarn\.lock''']
-	paths = ["node_modules"] # Ignoring Node dependencies
+	paths = ["node_modules", "vendor"] # Ignoring Node and Go dependencies
 	regexes = ['''test'''] # Ignoring lines with test
 
 [[rules]]
