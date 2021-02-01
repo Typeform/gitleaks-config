@@ -43,7 +43,7 @@ def merge_config(global_config_path, local_config_path):
     for section, values in repo_config[allowlist_key].items():
         for value in values:
             if section not in final_config["allowlist"]:
-                final_config["allowlist"][section] = value
+                final_config["allowlist"][section] = [value]
             elif value not in final_config["allowlist"][section]:
                 final_config["allowlist"][section].append(value)
 
