@@ -1,6 +1,7 @@
 # This file is only used to test the python script
 
 [allowlist]
+description = "excluding some stuff"
 regexes = [
     "AKIALALEMEL33243OLIA",
     "AKIALALEMEL38243OLIAE",
