@@ -41,6 +41,9 @@ def merge_config(global_config_path, local_config_path):
         allowlist_key = "allowlist"
 
     for section, values in repo_config[allowlist_key].items():
+        if section == "description":
+            continue
+
         for value in values:
             if section not in final_config["allowlist"]:
                 final_config["allowlist"][section] = [value]
