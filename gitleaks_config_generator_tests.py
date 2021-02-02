@@ -16,6 +16,7 @@ class TestGitleaksConfigGenerator(unittest.TestCase):
     def test_merge_config(self):
         final_config = c.merge_config('global_config.toml', '.gitleaks.toml')
         self.assertTrue('*.mp3' in final_config['allowlist']['files'])
+        self.assertTrue(isinstance(final_config['allowlist']['description'], str))
 
     def test_merge_old_config(self):
         final_config = c.merge_config('global_config.toml', '.gitleaks-old.toml')
