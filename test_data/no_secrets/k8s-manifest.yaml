@@ -1,0 +1,77 @@
+deploy:
+  image: quay.io/typeform/forms-api
+  repository: github.com/Typeform/forms-api
+  port: 9876
+  service_bridge_port: "31064"
+  cpu: 100
+  cpu_burst_factor: 5
+  memory: 128
+  liveness_probe:
+    httpGet:
+      path: /_health
+      port: (( grab deploy.port ))
+
+canary:
+  metrics:
+    - name: "HTTP Request Success Rate"
+      templateRef:
+        name: request-success-rate
+        namespace: flagger
+      thresholdRange:
+        min: 99 #minimum 99% success
+      interval: 1m
+    - name: "Load form error rate"
+      templateRef:
+        name: deep-purple-load-form-error-rate
+        namespace: flagger
+      thresholdRange:
+        max: 1 #maximum 1% of errors
+      interval: 1m
+    - name: "Save form error rate"
+      templateRef:
+        name: deep-purple-save-form-error-rate
+        namespace: flagger
+      thresholdRange:
+        max: 1 #maximum 1% of errors
+      interval: 1m
+
+config:
+  forms_api_proxy_address: 'http://forms'
+  forms_api_accounts_api_base_url: 'http://admin'
+  forms_api_workspaces_api_base_url: 'http://workspace'
+  forms_api_legacy_forms_api_base_url: 'http://forms'
+  forms_api_validation_api_base_url: 'http://michaudvalidator'
+  forms_api_themes_api_base_url: 'http://themes-api'
+  forms_api_package_service_base_url: 'http://packageservice'
+  forms_api_images_api_base_url: 'http://clafoutis'
+  forms_api_form_cache_invalidation_api_base_url: 'http://purgatory'
+  forms_api_submission_rules_api_base_url: 'http://submissionrules'
+  forms_api_form_event_workers: '1'
+  forms_api_form_event_queue_name: '(( concat environment "_formsapi_form" ))'
+  forms_api_workspace_event_workers: '1'
+  forms_api_workspace_event_queue_name: '(( concat environment "_formsapi_workspace" ))'
+  forms_api_account_event_workers: '1'
+  forms_api_account_event_queue_name: '(( concat environment "_formsapi_account" ))'
+  forms_api_theme_event_workers: '1'
+  forms_api_theme_event_queue_name: '(( concat environment "_formsapi_theme" ))'
+  forms_api_submission_rules_event_workers: '1'
+  forms_api_submission_rules_event_queue_name: '(( concat environment "_formsapi_submission_rules" ))'
+  forms_api_events_topic: '(( concat "arn:aws:sns:us-east-1:" deploy.aws_account_id ":" environment "_events" ))'
+  forms_api_db_user: 'formsapi'
+  forms_api_db_name: '(( concat shared.db_name_prefix "formsapi" ))'
+  forms_api_db_host: '(( concat shared.db_host_prefix "-postgres-formsapi." shared.rds_domain ))'
+  forms_api_db_port: '5432'
+  forms_api_read_db_user: 'formsapi'
+  forms_api_read_db_name: '(( concat shared.db_name_prefix "formsapi" ))'
+  forms_api_read_db_host: '(( concat shared.db_host_prefix "-postgres-formsapi." shared.rds_domain ))'
+  forms_api_read_db_port: '5432'
+  forms_api_public_api_address: '(( concat "https://api." environment ".typeform.com" ))'
+  aws_region: 'us-east-1'
+  statsd_address: 'localhost:9125'
+  zipkin_url: http://zipkin/api/v2/spans
+  forms_api_redis_url: '(( concat "redis://redis-" environment "." shared.redis_domain  ":6379/7" ))'
+  disable_jwt_rsa_validation: false
+secrets:
+  forms_api_launchdarkly_key: '(( grab shared.launchdarkly_key ))'
+  forms_api_db_pass: '!!enveloped:agAAAAVrZXlpZAAQAAAAABn4DMDXv0+uqrbCJg2Y6LYFY2lwaGVydGV4dAA4AAAAAAJp7+bPGuN+YgAJrj09EzrsbJhqHVQWlyRl+qgj5/awkzyBtY7yyVyIanIc5fjD8ty708jeOQzcAA=='
+  forms_api_read_db_pass: '!!enveloped:agAAAAVrZXlpZAAQAAAAABn4DMDXv0+uqrbCJg2Y6LYFY2lwaGVydGV4dAA4AAAAAAJp7+bPGuN+YgAJrj09EzrsbJhqHVQWlyRl+qgj5/awkzyBtY7yyVyIanIc5fjD8ty708jeOQzcAA=='
