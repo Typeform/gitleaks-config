@@ -214,3 +214,16 @@ title = "Global gitleaks config"
 		Min = "4"
 		Max = "7"
 		Group = "1"
+
+[[rules]]
+	description = "Hardcoded credentials in HCL files (*.tf)"
+	file = '''^(.*?)\.tf$'''
+	regex = '''(?i)(?:secret|key|signature|password|pwd|pass|token)(?:.{0,20})(?:=){1}(?:\s)*?"(.{4,120})"'''
+	tags = ["credentials", "hardcoded", "hcl"]
+	[[rules.Entropies]]
+		Min = "3"
+		Max = "7"
+		Group = "1"
+	[rules.allowlist]
+		description = "Skip variable substitution"
+		regexes = ['''\${(?:.)*?}''']
