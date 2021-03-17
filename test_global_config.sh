@@ -10,7 +10,7 @@ run_tests () {
         mkdir ${repo_dir} && cd ${repo_dir} && git init && cd ..
 
         # Copy and git commit the test file
-        cp ${f} ${repo_dir}
+        cp -r ${f} ${repo_dir}
         cd ${repo_dir} && git add . && git commit -m 'test' && cd ..
 
         # Run gitleaks on the repo
