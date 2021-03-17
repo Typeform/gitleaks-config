@@ -7,10 +7,11 @@ gitleaks_config_container="quay.io/typeform/gitleaks-config"
 repo_dir="${PWD}/test_repo"
 
 cleanup () {
+    echo "Cleaning up..."
     rm -f ${final_config} ${repo_dir}
 }
 
-trap cleanup SIGINT
+trap cleanup EXIT
 
 # Run gitleaks on each file of the given directory $1
 # $2 is the value of the expected exit code of gitleaks execution (i.e. secrets detection expected or not)
@@ -65,8 +66,5 @@ if [ ${tests_failed} -eq 0 ]; then
 else
     echo "\033[0;31mTests failed\033[0m"
 fi
-
-# Cleanup
-cleanup
 
 exit ${tests_failed}
