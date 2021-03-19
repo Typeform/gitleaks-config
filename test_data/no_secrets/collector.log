@@ -1,0 +1,2 @@
+collector.Increment("deliveries_count", metric.Tag{Key: "success", Value: delivery.IsSuccessful()}, metric.Tag{Key: "status_code", Value: strconv.Itoa(delivery.Status)})
+	if collectorErr != nil {
