@@ -189,8 +189,8 @@ title = "Global gitleaks config"
 		Max = "7"
 		Group = "1"
 	[rules.allowlist]
-		description = "Skip YAML Serverless variables, encrypted secrets, grabbed and concated values"
-		regexes = ['''\${(?:.)+}''', '''(?i)\(\((?:\s)*?(?:grab|concat)(?:.)*?(?:\s)*?\)\)''', '''(?i)!!enveloped:(?:\S)+''']
+		description = "Skip YAML Serverless variables, grabbed and concated values, encrypted secrets, and values with jinja2 placeholders"
+		regexes = ['''\${(?:.)+}''', '''(?i)\(\((?:\s)*?(?:grab|concat)(?:.)*?(?:\s)*?\)\)''', '''(?i)!!enveloped:(?:\S)+''', '''(?:.*?){{(?:.*?)}}''']
 
 [[rules]]
 	description = "Hardcoded credentials in YAML files as unquoted strings"
@@ -202,8 +202,8 @@ title = "Global gitleaks config"
 		Max = "7"
 		Group = "1"
 	[rules.allowlist]
-		description = "Skip YAML Serverless variables, encrypted secrets, grabbed and concated values"
-		regexes = ['''\${(?:.)+}''', '''(?i)\(\((?:\s)*?(?:grab|concat)(?:.)*?(?:\s)*?\)\)''', '''(?i)!!enveloped:(?:\S)+''']
+		description = "Skip YAML Serverless variables, grabbed and concated values, encrypted secrets, and values with jinja2 placeholders"
+		regexes = ['''\${(?:.)+}''', '''(?i)\(\((?:\s)*?(?:grab|concat)(?:.)*?(?:\s)*?\)\)''', '''(?i)!!enveloped:(?:\S)+''', '''(?:.*?){{(?:.*?)}}''']
 
 [[rules]]
 	description = "Hardcoded credentials in YAML files as multiline strings"
