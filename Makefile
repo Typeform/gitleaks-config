@@ -9,8 +9,8 @@ run:
 	docker container run --rm -v ${PWD}/.gitleaks.toml:/app/.gitleaks.toml $(IMAGE_NAME)
 
 test-config-generator: build
-	docker container run --rm -v ${PWD}/.gitleaks.toml:/app/.gitleaks.toml \
-		-v ${PWD}/.gitleaks-old.toml:/app/.gitleaks-old.toml $(IMAGE_NAME) \
+	docker container run --rm -v ${PWD}/test/local-config.toml:/app/local-config.toml \
+		-v ${PWD}/test/local-config-old.toml:/app/local-config-old.toml $(IMAGE_NAME) \
 		   python gitleaks_config_generator_tests.py
 
 test-gitleaks-config:

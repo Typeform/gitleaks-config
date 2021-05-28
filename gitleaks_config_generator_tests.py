@@ -9,17 +9,16 @@ class TestGitleaksConfigGenerator(unittest.TestCase):
         self.assertFalse('*.mp3' in final_config['allowlist']['files'])
 
     def test_get_final_config_with_local_config(self):
-        final_config = c.get_final_config('global_config.toml',
-                                          '.gitleaks.toml')
+        final_config = c.get_final_config('global_config.toml', 'local-config.toml')
         self.assertTrue('*.mp3' in final_config['allowlist']['files'])
 
     def test_merge_config(self):
-        final_config = c.merge_config('global_config.toml', '.gitleaks.toml')
+        final_config = c.merge_config('global_config.toml', 'local-config.toml')
         self.assertTrue('*.mp3' in final_config['allowlist']['files'])
         self.assertTrue(isinstance(final_config['allowlist']['description'], str))
 
     def test_merge_old_config(self):
-        final_config = c.merge_config('global_config.toml', '.gitleaks-old.toml')
+        final_config = c.merge_config('global_config.toml', 'local-config-old.toml')
         self.assertTrue('*.mp3' in final_config['allowlist']['files'])
 
 

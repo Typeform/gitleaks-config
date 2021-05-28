@@ -54,11 +54,11 @@ docker container run --rm $gitleaks_config_container \
 tests_failed=0
 set +e
 # Run tests expecting to detect a secret
-code_with_secrets_dir="${PWD}/test_data/secrets"
+code_with_secrets_dir="${PWD}/test/sample_files/secrets"
 run_tests ${code_with_secrets_dir} 1 "Expecting to detect secrets in"
 
 # Run tests expecting to not detect a secret
-code_with_no_secrets_dir="${PWD}/test_data/no_secrets"
+code_with_no_secrets_dir="${PWD}/test/sample_files/no_secrets"
 run_tests ${code_with_no_secrets_dir} 0 "Expecting to not detect secrets in"
 
 if [ ${tests_failed} -eq 0 ]; then
