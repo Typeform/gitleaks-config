@@ -4,6 +4,8 @@ title = "Global gitleaks config"
 	description = "Allowlisted files"
 	files = ['''^\.?gitleaks.toml$''', # Ignoring this file
 		'''(.*?)(jpg|gif|doc|pdf|bin)$''', # Ignoring common binaries
+		'''^(.*?)_test\.go$''', # Ignoring Go test files
+		'''^(.*?)\.spec\.js$''', # Ignoring JavaScript test files
 		'''(go.mod|go.sum)$''', # Ignoring Go manifests
 		'''vendor\.json''',
 		'''Gopkg\.(lock|toml)''',
@@ -152,9 +154,6 @@ title = "Global gitleaks config"
 		Min = "3"
 		Max = "7"
 		Group = "1"
-	[rules.allowlist]
-		description = "Skip Go test files"
-		files = ['''^(.*?)_test\.go$''']
 
 [[rules]]
 	description = "Hardcoded credentials in JavaScript files"
@@ -165,9 +164,6 @@ title = "Global gitleaks config"
 		Min = "3"
 		Max = "7"
 		Group = "1"
-	[rules.allowlist]
-		description = "Skip JavaScript test files"
-		files = ['''^(.*?)\.spec\.js$''']
 
 [[rules]]
 	description = "Hardcoded credentials in PHP files"
