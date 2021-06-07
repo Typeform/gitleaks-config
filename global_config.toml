@@ -15,10 +15,6 @@ title = "Global gitleaks config"
 	paths = ["node_modules", "vendor"] # Ignoring Node and Go dependencies
 	regexes = ['''test'''] # Ignoring lines with test
 
-[[rules]]
-	description = "AWS Manager ID"
-	regex = '''(A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}'''
-	tags = ["key", "AWS"]
 
 [[rules]]
 	description = "AWS Secret Key"
