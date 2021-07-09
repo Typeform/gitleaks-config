@@ -1,5 +1,6 @@
 #!/bin/sh
 set -e
+set -x
 
 # Generate configuration
 final_config="test_gitleaks_config.toml"
@@ -41,11 +42,11 @@ run_tests () {
 
 # Execute gitleaks with a given configuration file $1 in a given repo $2
 run_gitleaks () {
-    run_gitleaks="docker container run --rm --name=gitleaks \
+    run="docker container run --rm --name=gitleaks \
         -v ${1}:/tmp/gitleaks_config.toml \
         -v ${2}:/tmp/repo \
         quay.io/typeform/gitleaks --config=/tmp/gitleaks_config.toml --repo=/tmp/repo --verbose"
-    $run_gitleaks
+    $run
 }
 
 docker container run --rm $gitleaks_config_container \
