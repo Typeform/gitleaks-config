@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Run tests and build
+    runs-on: [self-hosted, bear]
+
+    steps:
+
+      - name: Build version
+        run: echo ${{ env.VERSION }}
+      
+      - name: Registry login
+        run: docker login -u=${{ secrets.DOCKER_USERNAME }} -p=${{ secrets.DOCKER_PASSWORD }} ${{ secrets.DOCKER_REGISTRY }}
+
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Run unit tests for config generator
+        run: make test-config-generator
+
+      - name: Run integration tests (code samples) for global gitleaks config
+        run: make test-gitleaks-config
