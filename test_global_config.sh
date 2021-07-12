@@ -51,7 +51,8 @@ run_gitleaks () {
 
 ls -l /tmp
 docker container run --rm $gitleaks_config_container \
-    python gitleaks_config_generator.py > $final_config
+    python gitleaks_config_generator.py 2>&1 $final_config
+cat $final_config
 file $final_config
 
 tests_failed=0
