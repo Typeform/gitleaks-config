@@ -12,7 +12,7 @@ cleanup () {
     rm -f ${final_config} ${repo_dir}
 }
 
-trap cleanup EXIT
+# trap cleanup EXIT
 
 # Run gitleaks on each file of the given directory $1
 # $2 is the value of the expected exit code of gitleaks execution (i.e. secrets detection expected or not)
