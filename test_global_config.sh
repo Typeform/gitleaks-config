@@ -3,7 +3,7 @@ set -e
 set -x
 
 # Generate configuration
-final_config="test_gitleaks_config.toml"
+final_config="/tmp/test_gitleaks_config.toml"
 gitleaks_config_container="quay.io/typeform/gitleaks-config"
 repo_dir="${PWD}/test_repo"
 
@@ -28,7 +28,7 @@ run_tests () {
 
         # Run gitleaks on the repo
         echo "Scanning ${f}"
-        run_gitleaks ${PWD}/${final_config} ${repo_dir}
+        run_gitleaks ${final_config} ${repo_dir}
         exit_code=$?
 
         if [ ${exit_code} -ne ${2} ]; then
