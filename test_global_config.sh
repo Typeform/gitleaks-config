@@ -51,6 +51,7 @@ run_gitleaks () {
 
 docker container run --rm $gitleaks_config_container \
     python gitleaks_config_generator.py > $final_config
+file $final_config
 
 tests_failed=0
 set +e
