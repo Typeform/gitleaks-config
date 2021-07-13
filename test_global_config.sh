@@ -1,9 +1,8 @@
 #!/bin/sh
 set -e
-set -x
 
 # Generate configuration
-final_config="/tmp/test_gitleaks_config.toml"
+final_config="${PWD}/global_config.toml"
 gitleaks_config_container="quay.io/typeform/gitleaks-config"
 repo_dir="${PWD}/test_repo"
 
@@ -12,7 +11,7 @@ cleanup () {
     rm -f ${final_config} ${repo_dir}
 }
 
-# trap cleanup EXIT
+trap cleanup EXIT
 
 # Run gitleaks on each file of the given directory $1
 # $2 is the value of the expected exit code of gitleaks execution (i.e. secrets detection expected or not)
@@ -28,7 +27,7 @@ run_tests () {
 
         # Run gitleaks on the repo
         echo "Scanning ${f}"
-        run_gitleaks ${final_config} ${repo_dir}
+        run_gitleaks ${PWD}/${final_config} ${repo_dir}
         exit_code=$?
 
         if [ ${exit_code} -ne ${2} ]; then
@@ -42,18 +41,15 @@ run_tests () {
 
 # Execute gitleaks with a given configuration file $1 in a given repo $2
 run_gitleaks () {
-    run="docker container run --rm --name=gitleaks \
+    run_gitleaks="docker container run --rm --name=gitleaks \
         -v ${1}:/tmp/gitleaks_config.toml \
         -v ${2}:/tmp/repo \
         quay.io/typeform/gitleaks --config=/tmp/gitleaks_config.toml --repo=/tmp/repo --verbose"
-    $run
+    $run_gitleaks
 }
 
-ls -l /tmp
-docker container run --rm $gitleaks_config_container \
-    python gitleaks_config_generator.py 2>&1 $final_config
-cat $final_config
-file $final_config
+#docker container run --rm $gitleaks_config_container \
+#    python gitleaks_config_generator.py > $final_config
 
 tests_failed=0
 set +e
