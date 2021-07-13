@@ -26,7 +26,7 @@ run_tests () {
         cp -r ${f} ${repo_dir}
         cd ${repo_dir}
         git add .
-        git commit -m 'test'
+        git -c user.name='Automated Tests' -c user.email='none@somewhere.org' commit -m 'test'
         cd ..
 
         # Run gitleaks on the repo
