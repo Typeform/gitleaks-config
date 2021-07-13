@@ -1,5 +1,6 @@
 #!/bin/sh
 set -e
+set -x
 
 # Generate configuration
 final_config="${PWD}/global_config.toml"
@@ -19,11 +20,14 @@ trap cleanup EXIT
 run_tests () {
     for f in ${1}/*; do
         # Create a new empty repo for each test file
-        mkdir -p ${repo_dir} && cd ${repo_dir} && git init && cd ..
+        mkdir -p ${repo_dir}&& cd ${repo_dir} && git init && cd ..
 
         # Copy and git commit the test file
         cp -r ${f} ${repo_dir}
-        cd ${repo_dir} && git add . && git commit -m 'test' && cd ..
+        cd ${repo_dir}
+        git add .
+        git commit -m 'test'
+        cd ..
 
         # Run gitleaks on the repo
         echo "Scanning ${f}"
