@@ -24,9 +24,6 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v2
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-
       - name: Run unit tests for config generator
         run: make test-config-generator
 
