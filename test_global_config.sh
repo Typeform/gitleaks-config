@@ -8,7 +8,7 @@ repo_dir="${PWD}/test_repo"
 
 cleanup () {
     echo "Cleaning up..."
-    rm -f ${final_config} ${repo_dir}
+    rm -f ${repo_dir}
 }
 
 trap cleanup EXIT
@@ -27,7 +27,7 @@ run_tests () {
 
         # Run gitleaks on the repo
         echo "Scanning ${f}"
-        run_gitleaks ${PWD}/${final_config} ${repo_dir}
+        run_gitleaks ${final_config} ${repo_dir}
         exit_code=$?
 
         if [ ${exit_code} -ne ${2} ]; then
@@ -47,9 +47,6 @@ run_gitleaks () {
         quay.io/typeform/gitleaks --config=/tmp/gitleaks_config.toml --repo=/tmp/repo --verbose"
     $run_gitleaks
 }
-
-#docker container run --rm $gitleaks_config_container \
-#    python gitleaks_config_generator.py > $final_config
 
 tests_failed=0
 set +e
