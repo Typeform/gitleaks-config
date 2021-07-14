@@ -2,13 +2,13 @@
 set -e
 
 # Generate configuration
-final_config="test_gitleaks_config.toml"
+final_config="${PWD}/global_config.toml"
 gitleaks_config_container="quay.io/typeform/gitleaks-config"
 repo_dir="${PWD}/test_repo"
 
 cleanup () {
     echo "Cleaning up..."
-    rm -f ${final_config} ${repo_dir}
+    rm -f ${repo_dir}
 }
 
 trap cleanup EXIT
@@ -19,15 +19,21 @@ trap cleanup EXIT
 run_tests () {
     for f in ${1}/*; do
         # Create a new empty repo for each test file
-        mkdir -p ${repo_dir} && cd ${repo_dir} && git init && cd ..
+        mkdir -p ${repo_dir}
+        cd ${repo_dir}
+        git init
+        cd ..
 
         # Copy and git commit the test file
         cp -r ${f} ${repo_dir}
-        cd ${repo_dir} && git add . && git commit -m 'test' && cd ..
+        cd ${repo_dir}
+        git add .
+        git -c user.name='Automated Tests' -c user.email='none@somewhere.org' commit -m 'test'
+        cd ..
 
         # Run gitleaks on the repo
         echo "Scanning ${f}"
-        run_gitleaks ${PWD}/${final_config} ${repo_dir}
+        run_gitleaks ${final_config} ${repo_dir}
         exit_code=$?
 
         if [ ${exit_code} -ne ${2} ]; then
@@ -47,9 +53,6 @@ run_gitleaks () {
         quay.io/typeform/gitleaks --config=/tmp/gitleaks_config.toml --repo=/tmp/repo --verbose"
     $run_gitleaks
 }
-
-docker container run --rm $gitleaks_config_container \
-    python gitleaks_config_generator.py > $final_config
 
 tests_failed=0
 set +e
