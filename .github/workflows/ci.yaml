@@ -8,6 +8,9 @@ on:
     branches:
       - master
 
+env:
+  VERSION: ${GITHUB_RUN_ID}
+
 jobs:
   build:
     name: Run tests and build
@@ -29,3 +32,13 @@ jobs:
 
       - name: Run integration tests (code samples) for global gitleaks config
         run: make test-gitleaks-config
+
+      - name: Build image
+        run: make build
+
+      - name: Push version images
+        run: make push
+
+      - name: Push latest images
+        if: contains(github.ref, 'refs/heads/master')
+        run: make push-latest
