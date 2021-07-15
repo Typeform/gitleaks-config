@@ -3,7 +3,6 @@ set -e
 
 # Generate configuration
 final_config="${PWD}/global_config.toml"
-gitleaks_config_container="quay.io/typeform/gitleaks-config"
 repo_dir="${PWD}/test_repo"
 
 cleanup () {
