@@ -152,8 +152,8 @@ title = "Global gitleaks config"
 		Group = "1"
 
 [[rules]]
-	description = "Hardcoded credentials in JavaScript files"
-	file = '''^(.*?)\.js$'''
+	description = "Hardcoded credentials in JavaScript or TypeScript files"
+	file = '''^(.*?)\.(?:j|t)s$'''
 	regex = '''(?i)(?:secret|key|signature|password|pwd|pass|token)(?:\w|\s*?)(?:=){1}(?:\s{0,10})[\"'`](.*?)[\"'`]'''
 	tags = ["credentials", "hardcoded", "js"]
 	[[rules.Entropies]]
