@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD ["cat", "travis_check_secrets.sh"]
+CMD ["python", "gitleaks_config_generator.py"]

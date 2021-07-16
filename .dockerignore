@@ -5,5 +5,4 @@
 !gitleaks_config_generator.py
 !gitleaks_config_generator_tests.py
 !requirements.txt
-!travis_check_secrets.sh
 !global_config.toml
