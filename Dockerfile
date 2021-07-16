@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD ["python" "gitleaks_config_generator.py"]
+CMD ["python", "gitleaks_config_generator.py"]
