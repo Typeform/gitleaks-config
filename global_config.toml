@@ -15,7 +15,7 @@ title = "Global gitleaks config"
 	paths = ["node_modules", # Ignoring Node dependencies
 		"vendor", # Ignoring Go dependencies
 		"test", # Ignoring test directories
-		"tests"]# Ignoring Node and Go dependencies and test directores
+		"tests"]
 	regexes = ['''test'''] # Ignoring lines with test
 
 
