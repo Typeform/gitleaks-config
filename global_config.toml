@@ -5,14 +5,17 @@ title = "Global gitleaks config"
 	files = ['''^\.?gitleaks.toml$''', # Ignoring this file
 		'''(.*?)(jpg|gif|doc|pdf|bin)$''', # Ignoring common binaries
 		'''^(.*?)_test\.go$''', # Ignoring Go test files
-		'''^(.*?)\.spec\.js$''', # Ignoring JavaScript test files
+		'''^(.*?)\.(spec|test)\.(j|t)s$''', # Ignoring JavaScript and TypeScript test files
 		'''(go.mod|go.sum)$''', # Ignoring Go manifests
 		'''vendor\.json''',
 		'''Gopkg\.(lock|toml)''',
 		'''package-lock\.json''', # Ignoring Node/JS manifests
 		'''package\.json''',
 		'''yarn\.lock''']
-	paths = ["node_modules", "vendor"] # Ignoring Node and Go dependencies
+	paths = ["node_modules", # Ignoring Node dependencies
+		"vendor", # Ignoring Go dependencies
+		"test", # Ignoring test directories
+		"tests"]
 	regexes = ['''test'''] # Ignoring lines with test
 
 
