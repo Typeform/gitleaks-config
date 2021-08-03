@@ -36,8 +36,18 @@ jobs:
       - name: Build image
         run: make build
 
-      - name: Push version images
+      - name: Semantic Release
+        id: semantic
+        if: github.event_name == 'push'
+        uses: codfish/semantic-release-action@v1
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+       - name: Push version image
+        if: steps.semantic.outputs.new-release-published == 'true'
         run: make push
+        env:
+          RELEASE_TAG: ${{ steps.semantic.outputs.release-version }}
 
       - name: Push latest images
         if: contains(github.ref, 'refs/heads/master')
