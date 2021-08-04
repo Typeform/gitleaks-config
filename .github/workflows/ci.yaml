@@ -43,7 +43,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-       - name: Push version image
+      - name: Push version image
         if: steps.semantic.outputs.new-release-published == 'true'
         run: make push
         env:
