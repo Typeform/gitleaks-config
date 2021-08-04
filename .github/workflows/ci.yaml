@@ -33,9 +33,6 @@ jobs:
       - name: Run integration tests (code samples) for global gitleaks config
         run: make test-gitleaks-config
 
-      - name: Build image
-        run: make build
-
       - name: Semantic Release
         id: semantic
         if: github.event_name == 'push'
@@ -51,6 +48,9 @@ jobs:
             ]
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Build image
+        run: make build
 
       - name: Push version image
         if: steps.semantic.outputs.new-release-published == 'true'
