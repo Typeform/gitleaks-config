@@ -41,7 +41,8 @@ jobs:
         if: github.event_name == 'push'
         uses: codfish/semantic-release-action@v1
         with:
-          branches: ['main']
+          branches: |
+            ['main']
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
