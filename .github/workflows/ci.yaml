@@ -43,6 +43,10 @@ jobs:
         with:
           branches: |
             ['main']
+          plugins: |
+            ["@semantic-release/npm", {
+              "npmPublish": false,
+            }]
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
