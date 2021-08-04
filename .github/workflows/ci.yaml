@@ -47,7 +47,7 @@ jobs:
             [
               "@semantic-release/commit-analyzer",
               "@semantic-release/release-notes-generator",
-              "@semantic-release/git"
+              "@semantic-release/github"
             ]
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
