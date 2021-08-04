@@ -3,10 +3,10 @@ name: CI
 on:
   pull_request:
     branches:
-      - master
+      - main
   push:
     branches:
-      - master
+      - main
 
 env:
   VERSION: ${GITHUB_RUN_ID}
@@ -50,5 +50,5 @@ jobs:
           RELEASE_TAG: ${{ steps.semantic.outputs.release-version }}
 
       - name: Push latest images
-        if: contains(github.ref, 'refs/heads/master')
+        if: contains(github.ref, 'refs/heads/main')
         run: make push-latest
