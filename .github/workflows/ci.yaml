@@ -50,14 +50,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: Build image
-        run: make build
-        env:
-          RELEASE_TAG: ${{ steps.semantic.outputs.release-version }}
-
-      - name: Push version image
+      - name: Build image and push it
         if: steps.semantic.outputs.new-release-published == 'true'
-        run: make push
+        run: make build && make push
         env:
           RELEASE_TAG: ${{ steps.semantic.outputs.release-version }}
 
