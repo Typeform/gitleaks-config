@@ -46,11 +46,14 @@ jobs:
               "@semantic-release/release-notes-generator",
               "@semantic-release/github"
             ]
+          tag_format: '${version}'
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Build image
         run: make build
+        env:
+          RELEASE_TAG: ${{ steps.semantic.outputs.release-version }}
 
       - name: Push version image
         if: steps.semantic.outputs.new-release-published == 'true'
