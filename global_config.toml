@@ -11,6 +11,8 @@ title = "Global gitleaks config"
 		'''Gopkg\.(lock|toml)''',
 		'''package-lock\.json''', # Ignoring Node/JS manifests
 		'''package\.json''',
+		'''composer\.json''',
+		'''composer\.lock''', #Ignoring PHP manifests
 		'''yarn\.lock''']
 	paths = ["node_modules", # Ignoring Node dependencies
 		"vendor", # Ignoring Go dependencies
