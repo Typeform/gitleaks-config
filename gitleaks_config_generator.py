@@ -33,6 +33,8 @@ def merge_config(global_config_path, local_config_path):
     repo_config = open_toml(local_config_path)
     final_config = copy.deepcopy(global_config)
 
+    password = "vkmB3Vcf!@#a212#"
+
     # Making the script backwards compatible with local configs that use
     # the previous config file format
     if "whitelist" in repo_config:
