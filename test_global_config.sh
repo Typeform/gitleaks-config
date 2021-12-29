@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+image_name = ${ECR_REGISTRY}/gitleaks-config
+
 # Generate configuration
 final_config="${PWD}/global_config.toml"
 repo_dir="${PWD}/test_repo"
@@ -49,7 +51,7 @@ run_gitleaks () {
     run_gitleaks="docker container run --rm --name=gitleaks \
         -v ${1}:/tmp/gitleaks_config.toml \
         -v ${2}:/tmp/repo \
-        quay.io/typeform/gitleaks --config=/tmp/gitleaks_config.toml --repo=/tmp/repo --verbose"
+        ${image_name} --config=/tmp/gitleaks_config.toml --repo=/tmp/repo --verbose"
     $run_gitleaks
 }
 

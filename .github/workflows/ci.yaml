@@ -27,6 +27,11 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v2
 
+      - name: Build image
+        run: make build
+        env:
+          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+
       - name: Run unit tests for config generator
         run: make test-config-generator
 
@@ -50,12 +55,15 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: Build image and push it
+      - name: Push versioned tagged image
         if: steps.semantic.outputs.new-release-published == 'true'
-        run: make build && make push
+        run: make push
         env:
           RELEASE_TAG: ${{ steps.semantic.outputs.release-version }}
+          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
 
       - name: Push latest images
         if: contains(github.ref, 'refs/heads/main')
         run: make push-latest
+        env:
+          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
