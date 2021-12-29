@@ -20,9 +20,6 @@ jobs:
 
       - name: Build version
         run: echo ${{ env.VERSION }}
-      
-      - name: Registry login
-        run: docker login -u=${{ secrets.DOCKER_USERNAME }} -p=${{ secrets.DOCKER_PASSWORD }} ${{ secrets.DOCKER_REGISTRY }}
 
       - name: Check out Git repository
         uses: actions/checkout@v2
@@ -34,9 +31,13 @@ jobs:
 
       - name: Run unit tests for config generator
         run: make test-config-generator
+        env:
+          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
 
       - name: Run integration tests (code samples) for global gitleaks config
         run: make test-gitleaks-config
+        env:
+          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
 
       - name: Semantic Release
         id: semantic
@@ -62,7 +63,7 @@ jobs:
           RELEASE_TAG: ${{ steps.semantic.outputs.release-version }}
           ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
 
-      - name: Push latest images
+      - name: Push latest-tagged image
         if: contains(github.ref, 'refs/heads/main')
         run: make push-latest
         env:
