@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-image_name = ${ECR_REGISTRY}/gitleaks-config
+image_name="${ECR_REGISTRY}/gitleaks-config"
 
 # Generate configuration
 final_config="${PWD}/global_config.toml"
