@@ -1,16 +1,19 @@
-IMAGE_NAME := "quay.io/typeform/gitleaks-config"
+IMAGE_NAME := ${ECR_REGISTRY}/gitleaks-config
 RELEASE_TAG ?= dev
 
 all: build run
 
 build:
-	docker build -t $(IMAGE_NAME):${RELEASE_TAG} -t $(IMAGE_NAME):latest .
+	docker build \
+		-t $(IMAGE_NAME):${RELEASE_TAG} \
+		-t $(IMAGE_NAME):latest \
+		.
 
 run:
 	docker container run --rm -v ${PWD}/.gitleaks.toml:/app/.gitleaks.toml \
 		$(IMAGE_NAME):${RELEASE_TAG}
 
-test-config-generator: build
+test-config-generator:
 	docker container run --rm -v ${PWD}/test/local-config.toml:/app/local-config.toml \
 		-v ${PWD}/test/local-config-old.toml:/app/local-config-old.toml \
 		$(IMAGE_NAME):${RELEASE_TAG} \
