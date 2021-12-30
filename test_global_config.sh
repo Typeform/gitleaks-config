@@ -3,7 +3,7 @@ set -e
 
 IMAGE_NAME="${ECR_REGISTRY}/gitleaks-config"
 GITLEAKS_IMAGE="zricethezav/gitleaks"
-GITLEAKS_VERSION="v7.2.0"
+GITLEAKS_VERSION="v6.1.2"
 
 # Generate configuration
 final_config="${PWD}/global_config.toml"
