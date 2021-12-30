@@ -2,6 +2,8 @@
 set -e
 
 IMAGE_NAME="${ECR_REGISTRY}/gitleaks-config"
+GITLEAKS_IMAGE="zricethezav/gitleaks"
+GITLEAKS_VERSION="v7.2.0"
 
 # Generate configuration
 final_config="${PWD}/global_config.toml"
@@ -51,7 +53,7 @@ run_gitleaks () {
     run_gitleaks="docker container run --rm --name=gitleaks \
         -v ${1}:/tmp/gitleaks_config.toml \
         -v ${2}:/tmp/repo \
-        quay.io/typeform/gitleaks-config:latest --config=/tmp/gitleaks_config.toml --repo=/tmp/repo --verbose"
+        ${GITLEAKS_IMAGE}:${GITLEAKS_VERSION} --config=/tmp/gitleaks_config.toml --repo=/tmp/repo --verbose"
         echo $run_gitleaks
     $run_gitleaks
 }
