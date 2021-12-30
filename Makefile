@@ -16,7 +16,7 @@ run:
 test-config-generator:
 	docker container run --rm -v ${PWD}/test/local-config.toml:/app/local-config.toml \
 		-v ${PWD}/test/local-config-old.toml:/app/local-config-old.toml \
-		$(IMAGE_NAME):${RELEASE_TAG} \
+		quay.io/Typeform/gitleaks-config \
 		python gitleaks_config_generator_tests.py
 
 test-gitleaks-config:
