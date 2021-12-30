@@ -25,7 +25,7 @@ test-gitleaks-config:
 test: test-config-generator test-gitleaks-config
 
 custom-push-latest-ecr:
-	docker build -t $(IMAGE_NAME):latest
+	docker build -t $(IMAGE_NAME):latest .
 	docker push $(IMAGE_NAME):latest
 
 push:
