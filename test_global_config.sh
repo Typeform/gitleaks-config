@@ -51,7 +51,7 @@ run_gitleaks () {
     run_gitleaks="docker container run --rm --name=gitleaks \
         -v ${1}:/tmp/gitleaks_config.toml \
         -v ${2}:/tmp/repo \
-        quay.io/Typeform/gitleaks-config --config=/tmp/gitleaks_config.toml --repo=/tmp/repo --verbose"
+        quay.io/typeform/gitleaks-config:latest --config=/tmp/gitleaks_config.toml --repo=/tmp/repo --verbose"
         echo $run_gitleaks
     $run_gitleaks
 }
