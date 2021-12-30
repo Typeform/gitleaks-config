@@ -53,7 +53,7 @@ run_gitleaks () {
     run_gitleaks="docker container run --rm --name=gitleaks \
         -v ${1}:/tmp/gitleaks_config.toml \
         -v ${2}:/tmp/repo \
-        ${GITLEAKS_IMAGE}:${GITLEAKS_VERSION} --config-path=/tmp/gitleaks_config.toml --path=/tmp/repo --verbose"
+        ${GITLEAKS_IMAGE}:${GITLEAKS_VERSION} --config=/tmp/gitleaks_config.toml --repo=/tmp/repo --verbose"
     echo $run_gitleaks
     $run_gitleaks
 }
