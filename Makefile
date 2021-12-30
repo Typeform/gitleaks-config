@@ -16,7 +16,7 @@ run:
 test-config-generator:
 	docker container run --rm -v ${PWD}/test/local-config.toml:/app/local-config.toml \
 		-v ${PWD}/test/local-config-old.toml:/app/local-config-old.toml \
-		quay.io/typeform/gitleaks-config:latest \
+		$(IMAGE_NAME):${RELEASE_TAG} \
 		python gitleaks_config_generator_tests.py
 
 test-gitleaks-config:
@@ -24,12 +24,12 @@ test-gitleaks-config:
 
 test: test-config-generator test-gitleaks-config
 
+custom-push-latest-ecr:
+	docker build -t $(IMAGE_NAME):latest
+	docker push $(IMAGE_NAME):latest
+
 push:
 	docker push $(IMAGE_NAME):${RELEASE_TAG}
-
-custom-push-ecr:
-	docker build -t $(IMAGE_NAME):1.8.0 .
-	docker push $(IMAGE_NAME):1.8.0
 
 push-latest:
 	docker push $(IMAGE_NAME):latest

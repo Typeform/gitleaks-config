@@ -1,7 +1,6 @@
 #!/bin/sh
 set -e
 
-IMAGE_NAME="${ECR_REGISTRY}/gitleaks-config"
 GITLEAKS_IMAGE="zricethezav/gitleaks"
 GITLEAKS_VERSION="v6.1.2"
 
