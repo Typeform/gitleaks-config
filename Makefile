@@ -27,5 +27,8 @@ test: test-config-generator test-gitleaks-config
 push:
 	docker push $(IMAGE_NAME):${RELEASE_TAG}
 
+custom-push-ecr:
+	docker push $(IMAGE_NAME):1.8.0
+
 push-latest:
 	docker push $(IMAGE_NAME):latest

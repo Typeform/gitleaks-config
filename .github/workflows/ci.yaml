@@ -39,6 +39,9 @@ jobs:
         env:
           ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
 
+      - name: One time step to upload gitleaks-config:1.8.0 to ECR
+        run: make custom-push-ecr
+
       - name: Semantic Release
         id: semantic
         if: github.event_name == 'push'
