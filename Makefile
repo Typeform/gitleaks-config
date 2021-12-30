@@ -28,6 +28,7 @@ push:
 	docker push $(IMAGE_NAME):${RELEASE_TAG}
 
 custom-push-ecr:
+	docker build -t $(IMAGE_NAME):1.8.0 .
 	docker push $(IMAGE_NAME):1.8.0
 
 push-latest:
