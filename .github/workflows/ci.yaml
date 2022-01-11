@@ -13,7 +13,7 @@ env:
 
 jobs:
   build:
-    name: Run tests and build
+    name: Run tests, build, and publish if needed
     runs-on: [self-hosted, bear]
 
     steps:
