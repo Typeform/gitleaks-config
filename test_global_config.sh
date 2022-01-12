@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
+GITLEAKS_IMAGE="zricethezav/gitleaks"
+GITLEAKS_VERSION="v6.1.2"
+
 # Generate configuration
 final_config="${PWD}/global_config.toml"
 repo_dir="${PWD}/test_repo"
@@ -49,7 +52,8 @@ run_gitleaks () {
     run_gitleaks="docker container run --rm --name=gitleaks \
         -v ${1}:/tmp/gitleaks_config.toml \
         -v ${2}:/tmp/repo \
-        quay.io/typeform/gitleaks --config=/tmp/gitleaks_config.toml --repo=/tmp/repo --verbose"
+        ${GITLEAKS_IMAGE}:${GITLEAKS_VERSION} --config=/tmp/gitleaks_config.toml --repo=/tmp/repo --verbose"
+    echo $run_gitleaks
     $run_gitleaks
 }
 
