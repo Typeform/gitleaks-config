@@ -13,7 +13,10 @@ title = "Global gitleaks config"
 		'''package\.json''',
 		'''composer\.json''',
 		'''composer\.lock''', #Ignoring PHP manifests
-		'''yarn\.lock''']
+		'''yarn\.lock''',
+		'''Pipfile''', # Ignoring Python manifests
+		'''Pipfile\.lock''',
+		'''poetry\.lock''']
 	paths = ["node_modules", # Ignoring Node dependencies
 		"vendor", # Ignoring Go dependencies
 		"test", # Ignoring test directories
