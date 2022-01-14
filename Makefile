@@ -24,8 +24,8 @@ test-gitleaks-config:
 
 test: test-config-generator test-gitleaks-config
 
-push:
+push: build
 	docker push $(IMAGE_NAME):${RELEASE_TAG}
 
-push-latest:
+push-latest: build
 	docker push $(IMAGE_NAME):latest
