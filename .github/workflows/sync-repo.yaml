@@ -14,5 +14,13 @@ jobs:
     - name: Add remote upstream
       run: git remote add upstream https://github.com/Typeform/gitleaks-config-source.git
 
-    - name: Fetch from upstream
-      run: git fetch upstream
+    - name: Pull and fetch from upstream
+      run: |
+        git pull upstream main
+        git fetch upstream
+
+    - name: Push updates and tags to origin
+      run: |
+        git push origin main
+        git push --tags origin
+
