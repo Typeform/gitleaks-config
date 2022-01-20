@@ -1,0 +1,18 @@
+name: Synchronize Repository
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sync_repo:
+    runs-on: ubuntu-latest
+
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Add remote upstream
+      run: git remote add upstream https://github.com/Typeform/gitleaks-config-source.git
+
+    - name: Fetch from upstream
+      run: git fetch upstream
