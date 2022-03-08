@@ -23,6 +23,8 @@ title = "Global gitleaks config"
 		"tests"]
 	regexes = ['''test'''] # Ignoring lines with test
 
+# The following rules look for credentials with a well-known format, usually from third parties.
+# These rules evaluate all file types.
 
 [[rules]]
 	description = "AWS Secret Key"
@@ -144,7 +146,17 @@ title = "Global gitleaks config"
 	regex = '''(?i)twilio(.{0,20})?SK[0-9a-f]{32}'''
 	tags = ["key", "twilio"]
 
-# The following rules check for credentials assigned to variables that its value has an entropy of more than 3 bits.
+[[rules]]
+	description = "Authorization Bearer tokens"
+	regex = '''(?i)Bearer(?:\s)+(\S{8,})'''
+	tags = ["key", "HTTP", "bearer"]
+	[[rules.Entropies]]
+		Min = "3.8"
+		Max = "7"
+		Group = "1"
+
+
+# The following rules look for credentials assigned to variables that its value has an entropy of more than 3 bits.
 # To achieve this there's a regexp for each language. The regexp checks for a variable with a suspicious name followed
 # by a value assignation (for example, := in Go, = in JS, etc.). Then, looks for a group of non-space characters enclosed
 # between quotes. If that group has an entropy higher than 3 bits the rule will trigger.
