@@ -1,4 +1,4 @@
-IMAGE_NAME := ${ECR_REGISTRY}/gitleaks-config
+IMAGE_NAME := ${CONTAINER_REGISTRY}/gitleaks-config
 RELEASE_TAG ?= dev
 
 all: build run
@@ -28,4 +28,15 @@ push: build
 	docker push $(IMAGE_NAME):${RELEASE_TAG}
 
 push-latest: build
+	docker push $(IMAGE_NAME):latest
+
+# Temporary until SP-1665 is done
+push-quay: IMAGE_NAME=quay.io/typeform/gitleaks-config
+push-quay: build
+	docker login -u=${DOCKER_USERNAME} -p=${DOCKER_PASSWORD} ${CONTAINER_REGISTRY} quay.io
+	docker push $(IMAGE_NAME):${RELEASE_TAG}
+
+push-latest-quay: IMAGE_NAME=quay.io/typeform/gitleaks-config
+push-latest-quay: build
+	docker login -u=${DOCKER_USERNAME} -p=${DOCKER_PASSWORD} ${CONTAINER_REGISTRY} quay.io
 	docker push $(IMAGE_NAME):latest

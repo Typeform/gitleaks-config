@@ -27,17 +27,17 @@ jobs:
       - name: Build image
         run: make build
         env:
-          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+          CONTAINER_REGISTRY: ${{ secrets.ECR_REGISTRY }}
 
       - name: Run unit tests for config generator
         run: make test-config-generator
         env:
-          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+          CONTAINER_REGISTRY: ${{ secrets.ECR_REGISTRY }}
 
       - name: Run integration tests (code samples) for global gitleaks config
         run: make test-gitleaks-config
         env:
-          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+          CONTAINER_REGISTRY: ${{ secrets.ECR_REGISTRY }}
 
       - name: Semantic Release
         id: semantic
@@ -61,10 +61,27 @@ jobs:
         run: make push
         env:
           RELEASE_TAG: ${{ steps.semantic.outputs.release-version }}
-          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+          CONTAINER_REGISTRY: ${{ secrets.ECR_REGISTRY }}
 
       - name: Push latest-tagged image
         if: contains(github.ref, 'refs/heads/main')
         run: make push-latest
         env:
-          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+          CONTAINER_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+
+      # This is a temporary fix until SP-1665 is done
+      - name: Push versioned tagged image to quay.io
+        if: steps.semantic.outputs.new-release-published == 'true'
+        run: make push-quay
+        env:
+          RELEASE_TAG: ${{ steps.semantic.outputs.release-version }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push latest-tagged image to quay.io
+        if: contains(github.ref, 'refs/heads/main')
+        run: make push-latest-quay
+        env:
+          RELEASE_TAG: ${{ steps.semantic.outputs.release-version }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
