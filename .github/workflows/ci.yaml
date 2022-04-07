@@ -82,6 +82,5 @@ jobs:
         if: contains(github.ref, 'refs/heads/main')
         run: make push-latest-quay
         env:
-          RELEASE_TAG: ${{ steps.semantic.outputs.release-version }}
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
