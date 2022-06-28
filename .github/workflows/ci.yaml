@@ -14,7 +14,7 @@ env:
 jobs:
   build:
     name: Run tests, build, and publish if needed
-    runs-on: [self-hosted, bear]
+    runs-on: [self-hosted, bear-ephemeral]
 
     steps:
 
@@ -34,7 +34,7 @@ jobs:
         env:
           CONTAINER_REGISTRY: ${{ secrets.ECR_REGISTRY }}
 
-      - name: Run integration tests (code samples) for global gitleaks config
+      - name: Run tests (code samples) for global gitleaks config
         run: make test-gitleaks-config
         env:
           CONTAINER_REGISTRY: ${{ secrets.ECR_REGISTRY }}

@@ -15,7 +15,11 @@ import toml
 
 
 def main():
-    final_config = get_final_config('global_config.toml', '.gitleaks.toml')
+    config_file = 'global_config_legacy.toml' # config file for gitleaks versions previous to v8
+    if len(sys.argv) >= 2:
+        config_file = 'global_config.toml'
+
+    final_config = get_final_config(config_file, '.gitleaks.toml')
     print(toml.dumps(final_config))
 
 

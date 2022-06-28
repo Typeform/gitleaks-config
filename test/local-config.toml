@@ -6,7 +6,7 @@ regexes = [
     "AKIALALEMEL33243OLIA",
     "AKIALALEMEL38243OLIAE",
 ]
-files = [
+paths = [
     "*.mp3"
 ]
 commits = [

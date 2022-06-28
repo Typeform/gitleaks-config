@@ -2,40 +2,19 @@
 set -e
 
 GITLEAKS_IMAGE="zricethezav/gitleaks"
-GITLEAKS_VERSION="v6.1.2"
+GITLEAKS_VERSION="v8.8.8"
 
 # Generate configuration
-final_config="${PWD}/global_config.toml"
-repo_dir="${PWD}/test_repo"
-
-cleanup () {
-    echo "Cleaning up..."
-    rm -f ${repo_dir}
-}
-
-trap cleanup EXIT
+gitleaks_config="${PWD}/global_config.toml"
 
 # Run gitleaks on each file of the given directory $1
 # $2 is the value of the expected exit code of gitleaks execution (i.e. secrets detection expected or not)
 # $3 is the error message to be shown when gitleaks' exit code is different than expected
 run_tests () {
     for f in ${1}/*; do
-        # Create a new empty repo for each test file
-        mkdir -p ${repo_dir}
-        cd ${repo_dir}
-        git init
-        cd ..
-
-        # Copy and git commit the test file
-        cp -r ${f} ${repo_dir}
-        cd ${repo_dir}
-        git add .
-        git -c user.name='Automated Tests' -c user.email='none@somewhere.org' commit -m 'test'
-        cd ..
-
-        # Run gitleaks on the repo
+        # Run gitleaks on the file to be tested
         echo "Scanning ${f}"
-        run_gitleaks ${final_config} ${repo_dir}
+        run_gitleaks ${gitleaks_config} ${f}
         exit_code=$?
 
         if [ ${exit_code} -ne ${2} ]; then
@@ -43,16 +22,24 @@ run_tests () {
             tests_failed=1
         fi
 
-        rm -rf ${repo_dir}
     done
 }
 
 # Execute gitleaks with a given configuration file $1 in a given repo $2
 run_gitleaks () {
+    config_file_in_container="/tmp/gitleaks_config.toml"
+    filename=$(basename ${2})
+    scan_source="/tmp/${filename}"
+    gitleaks_cmd="detect \
+                    --config ${config_file_in_container} \
+                    --source ${scan_source} \
+                    --no-git \
+                    --report-format json \
+                    --verbose"
     run_gitleaks="docker container run --rm --name=gitleaks \
-        -v ${1}:/tmp/gitleaks_config.toml \
-        -v ${2}:/tmp/repo \
-        ${GITLEAKS_IMAGE}:${GITLEAKS_VERSION} --config=/tmp/gitleaks_config.toml --repo=/tmp/repo --verbose"
+        -v ${1}:${config_file_in_container} \
+        -v ${2}:${scan_source} \
+        ${GITLEAKS_IMAGE}:${GITLEAKS_VERSION} ${gitleaks_cmd}"
     echo $run_gitleaks
     $run_gitleaks
 }
@@ -60,11 +47,11 @@ run_gitleaks () {
 tests_failed=0
 set +e
 # Run tests expecting to detect a secret
-code_with_secrets_dir="${PWD}/test/sample_files/secrets"
+code_with_secrets_dir="${PWD}/sample_files/secrets"
 run_tests ${code_with_secrets_dir} 1 "Expecting to detect secrets in"
 
 # Run tests expecting to not detect a secret
-code_with_no_secrets_dir="${PWD}/test/sample_files/no_secrets"
+code_with_no_secrets_dir="${PWD}/sample_files/no_secrets"
 run_tests ${code_with_no_secrets_dir} 0 "Expecting to not detect secrets in"
 
 if [ ${tests_failed} -eq 0 ]; then

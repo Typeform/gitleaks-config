@@ -6,3 +6,4 @@
 !gitleaks_config_generator_tests.py
 !requirements.txt
 !global_config.toml
+!global_config_legacy.toml
