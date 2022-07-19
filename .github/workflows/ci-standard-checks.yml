@@ -10,7 +10,7 @@ on:
 
 jobs:
   ci-standard-checks:
-    runs-on: [self-hosted, automated-checks]
+    runs-on: [self-hosted, automated-checks-ephemeral]
 
     steps:
       - name: Check Out Source Code
