@@ -11,7 +11,7 @@ import sys
 import copy
 from pathlib import Path
 
-import toml
+import tomlkit
 
 
 def main():
@@ -20,7 +20,7 @@ def main():
         config_file = 'global_config.toml'
 
     final_config = get_final_config(config_file, '.gitleaks.toml')
-    print(toml.dumps(final_config))
+    print(tomlkit.dumps(final_config))
 
 
 def get_final_config(global_config_path, local_config_path):
@@ -59,11 +59,10 @@ def merge_config(global_config_path, local_config_path):
 
 def open_toml(path):
     try:
-        return toml.load(path)
-    except TypeError:
-        print(f"Error opening the {path} file.", file=sys.stderr)
-    except toml.TomlDecodeError:
-        print(f"Error decoding the {path} file.", file=sys.stderr)
+        with open(path, 'r') as file:
+            return tomlkit.load(file)
+    except Exception as e:
+        print(f"Error opening the {path} file: {e}", file=sys.stderr)
 
 
 if __name__ == "__main__":
