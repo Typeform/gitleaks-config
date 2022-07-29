@@ -2,7 +2,6 @@ title = "Global gitleaks config"
 
 [allowlist]
 description = "Global allowlisted paths, files, and stopwords"
-# TODO: figure out what to do with the old `.gitleaks.toml` files in repos: migrate them? convert them when mergin them?
 paths = [
   '''\.gitleaks\.toml$''', # Ignoring the generated configuration file
   '''(.*?)(jpg|gif|doc|pdf|bin)$''', # Ignoring common binaries
