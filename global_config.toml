@@ -890,3 +890,16 @@ description = "Skip variable substitution"
 regexes = [
   '''\${(?:.)*?}''',
 ]
+
+[[rules]]
+description = "Hardcoded credentials in Python files (*.py)"
+id = "credentials-python"
+path = '''(.*?)\.py$'''
+regex = '''(?i)(?:secret|key|password|pwd|pass|token)(?:.{0,20})(?:=){1}(?:\s)*?["\x27](.{4,120})["\x27]'''
+secretGroup = 1
+entropy = 3
+tags = [
+  "credentials",
+  "hardcoded",
+  "hcl",
+]
