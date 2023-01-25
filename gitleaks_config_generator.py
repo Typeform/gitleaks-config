@@ -11,12 +11,16 @@ import sys
 import copy
 from pathlib import Path
 
-import toml
+import tomlkit
 
 
 def main():
-    final_config = get_final_config('global_config.toml', '.gitleaks.toml')
-    print(toml.dumps(final_config))
+    config_file = 'global_config_legacy.toml' # config file for gitleaks versions previous to v8
+    if '--v8-config' in sys.argv:
+        config_file = 'global_config.toml'
+
+    final_config = get_final_config(config_file, '.gitleaks.toml')
+    print(tomlkit.dumps(final_config))
 
 
 def get_final_config(global_config_path, local_config_path):
@@ -33,6 +37,12 @@ def merge_config(global_config_path, local_config_path):
     repo_config = open_toml(local_config_path)
     final_config = copy.deepcopy(global_config)
 
+    # Temporary backwards compatibility with gitleaks v7 until all repos
+    # have updated their .gitleaks.toml files
+    v8_config = False
+    if global_config_path == "global_config.toml":
+        v8_config = True
+
     # Making the script backwards compatible with local configs that use
     # the previous config file format
     if "whitelist" in repo_config:
@@ -44,22 +54,27 @@ def merge_config(global_config_path, local_config_path):
         if section == "description":
             continue
 
+        # This will autocorrect .gitleaks.toml files that have a v7 config
+        # file format but requesting a v8 config file format
+        section_key = section
+        if v8_config and section == "files":
+            section_key = "paths"
+
         for value in values:
-            if section not in final_config["allowlist"]:
-                final_config["allowlist"][section] = [value]
-            elif value not in final_config["allowlist"][section]:
-                final_config["allowlist"][section].append(value)
+            if section_key not in final_config["allowlist"]:
+                final_config["allowlist"][section_key] = [value]
+            elif value not in final_config["allowlist"][section_key]:
+                final_config["allowlist"][section_key].append(value)
 
     return final_config
 
 
 def open_toml(path):
     try:
-        return toml.load(path)
-    except TypeError:
-        print(f"Error opening the {path} file.", file=sys.stderr)
-    except toml.TomlDecodeError:
-        print(f"Error decoding the {path} file.", file=sys.stderr)
+        with open(path, 'r') as file:
+            return tomlkit.load(file)
+    except Exception as e:
+        print(f"Error opening the {path} file: {e}", file=sys.stderr)
 
 
 if __name__ == "__main__":

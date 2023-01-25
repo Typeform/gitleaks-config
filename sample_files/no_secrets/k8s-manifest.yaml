@@ -1,5 +1,5 @@
 deploy:
-  image: quay.io/typeform/forms-api
+  image: ecr.io/typeform/forms-api
   repository: github.com/Typeform/forms-api
   port: 9876
   service_bridge_port: "31064"

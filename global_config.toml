@@ -1,226 +1,905 @@
 title = "Global gitleaks config"
 
 [allowlist]
-	description = "Allowlisted files"
-	files = ['''^\.?gitleaks.toml$''', # Ignoring this file
-		'''(.*?)(jpg|gif|doc|pdf|bin)$''', # Ignoring common binaries
-		'''^(.*?)_test\.go$''', # Ignoring Go test files
-		'''^(.*?)\.(spec|test)\.(j|t)s$''', # Ignoring JavaScript and TypeScript test files
-		'''(go.mod|go.sum)$''', # Ignoring Go manifests
-		'''vendor\.json''',
-		'''Gopkg\.(lock|toml)''',
-		'''package-lock\.json''', # Ignoring Node/JS manifests
-		'''package\.json''',
-		'''composer\.json''',
-		'''composer\.lock''', #Ignoring PHP manifests
-		'''yarn\.lock''']
-	paths = ["node_modules", # Ignoring Node dependencies
-		"vendor", # Ignoring Go dependencies
-		"test", # Ignoring test directories
-		"tests"]
-	regexes = ['''test'''] # Ignoring lines with test
+description = "Global allowlisted paths, files, and stopwords"
+paths = [
+  '''\.gitleaks\.toml$''', # Ignoring the generated configuration file
+  '''(.*?)(jpg|gif|doc|pdf|bin)$''', # Ignoring common binaries
+  '''(.*?)_test\.go$''', # Ignoring Go test files
+  '''(.*?)\.(spec|test)\.(j|t)s$''', # Ignoring JavaScript and TypeScript test files
+  '''go\.(mod|sum)$''', # Ignoring Go manifests
+  '''vendor\.json''',
+  '''Gopkg\.(lock|toml)''',
+  '''package-lock\.json''', # Ignoring Node/JS manifests
+  '''package\.json''',
+  '''composer\.json''',
+  '''composer\.lock''', #Ignoring PHP manifests
+  '''yarn\.lock''',
+  '''Pipfile''', # Ignoring Python manifests
+  '''Pipfile\.lock''',
+  '''poetry\.lock''',
+  '''node_modules\/''', # Ignoring Node dependencies
+  '''vendor\/''', # Ignoring Go dependencies
+  '''test(|s)\/''', # Ignoring test directories
+]
+# TODO: change this to "stopwords"
+regexes = ['''someFunnyWord'''] # Ignoring lines with test
 
-
-[[rules]]
-	description = "AWS Secret Key"
-	regex = '''(?i)aws(.{0,20})?(?-i)[0-9a-zA-Z\/+]{40}'''
-	tags = ["key", "AWS"]
-
-[[rules]]
-	description = "AWS MWS key"
-	regex = '''amzn\.mws\.[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'''
-	tags = ["key", "AWS", "MWS"]
+# The following rules, extracted from gitleaks default config, look for credentials with a well-known format, usually from third parties.
+# These rules evaluate all file types.
 
 [[rules]]
-	description = "Facebook Secret Key"
-	regex = '''(?i)(facebook|fb)(.{0,20})?(?-i)[0-9a-f]{32}'''
-	tags = ["key", "Facebook"]
+description = "Adobe Client ID (Oauth Web)"
+id = "adobe-client-id"
+regex = '''(?i)(?:adobe)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-f0-9]{32})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "adobe",
+]
 
 [[rules]]
-	description = "Facebook Client ID"
-	regex = '''(?i)(facebook|fb)(.{0,20})?[0-9]{13,17}'''
-	tags = ["key", "Facebook"]
+description = "Adobe Client Secret"
+id = "adobe-client-secret"
+regex = '''(?i)\b((p8e-)(?i)[a-z0-9]{32})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+tags = [
+  "p8e-",
+]
 
 [[rules]]
-	description = "Twitter Secret Key"
-	regex = '''(?i)twitter(.{0,20})?[0-9a-z]{35,44}'''
-	tags = ["key", "Twitter"]
+description = "Age secret key"
+id = "age secret key"
+regex = '''AGE-SECRET-KEY-1[QPZRY9X8GF2TVDW0S3JN54KHCE6MUA7L]{58}'''
+tags = [
+  "age-secret-key-1",
+]
 
 [[rules]]
-	description = "Twitter Client ID"
-	regex = '''(?i)twitter(.{0,20})?[0-9a-z]{18,25}'''
-	tags = ["client", "Twitter"]
+description = "Alibaba AccessKey ID"
+id = "alibaba-access-key-id"
+regex = '''(?i)\b((LTAI)(?i)[a-z0-9]{20})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+tags = [
+  "ltai",
+]
 
 [[rules]]
-	description = "Github"
-	regex = '''(?i)github(.{0,20})?(?-i)[0-9a-zA-Z]{35,40}'''
-	tags = ["key", "Github"]
+description = "Alibaba Secret Key"
+id = "alibaba-secret-key"
+regex = '''(?i)(?:alibaba)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-z0-9]{30})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "alibaba",
+]
 
 [[rules]]
-	description = "LinkedIn Client ID"
-	regex = '''(?i)linkedin(.{0,20})?(?-i)[0-9a-z]{12}'''
-	tags = ["client", "LinkedIn"]
+description = "Asana Client ID"
+id = "asana-client-id"
+regex = '''(?i)(?:asana)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([0-9]{16})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "asana",
+]
 
 [[rules]]
-	description = "LinkedIn Secret Key"
-	regex = '''(?i)linkedin(.{0,20})?[0-9a-z]{16}'''
-	tags = ["secret", "LinkedIn"]
+description = "Asana Client Secret"
+id = "asana-client-secret"
+regex = '''(?i)(?:asana)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-z0-9]{32})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "asana",
+]
 
 [[rules]]
-	description = "Slack"
-	regex = '''xox[baprs]-([0-9a-zA-Z]{10,48})?'''
-	tags = ["key", "Slack"]
+description = "Atlassian API token"
+id = "atlassian-api-token"
+regex = '''(?i)(?:atlassian|confluence)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-z0-9]{24})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "atlassian",
+  "confluence",
+]
 
 [[rules]]
-	description = "Asymmetric Private Key"
-	regex = '''-----BEGIN ((EC|PGP|DSA|RSA|OPENSSH) )?PRIVATE KEY( BLOCK)?-----'''
-	tags = ["key", "AsymmetricPrivateKey"]
+description = "AWS"
+id = "aws-access-token"
+regex = '''(A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}'''
+tags = [
+  "akia",
+  "agpa",
+  "aida",
+  "aroa",
+  "aipa",
+  "anpa",
+  "anva",
+  "asia",
+]
 
 [[rules]]
-	description = "Google API key"
-	regex = '''AIza[0-9A-Za-z\\-_]{35}'''
-	tags = ["key", "Google"]
+description = "BitBucket Client ID"
+id = "bitbucket-client-id"
+regex = '''(?i)(?:bitbucket)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-z0-9]{32})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "bitbucket",
+]
 
 [[rules]]
-	description = "Google (GCP) Service Account"
-	regex = '''"type": "service_account"'''
-	tags = ["key", "Google"]
+description = "BitBucket Client Secret"
+id = "bitbucket-client-secret"
+regex = '''(?i)(?:bitbucket)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{64})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "bitbucket",
+]
 
 [[rules]]
-	description = "Heroku API key"
-	regex = '''(?i)heroku(.{0,20})?[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'''
-	tags = ["key", "Heroku"]
+description = "Beamer API token"
+id = "beamer-api-token"
+regex = '''(?i)(?:beamer)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}(b_[a-z0-9=_\-]{44})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "beamer",
+]
 
 [[rules]]
-	description = "MailChimp API key"
-	regex = '''(?i)(mailchimp|mc)(.{0,20})?[0-9a-f]{32}-us[0-9]{1,2}'''
-	tags = ["key", "Mailchimp"]
+description = "Clojars API token"
+id = "clojars-api-token"
+regex = '''(?i)(CLOJARS_)[a-z0-9]{60}'''
+tags = [
+  "clojars",
+]
 
 [[rules]]
-	description = "Mailgun API key"
-	regex = '''((?i)(mailgun|mg)(.{0,20})?)?key-[0-9a-z]{32}'''
-	tags = ["key", "Mailgun"]
+description = "Contentful delivery API token"
+id = "contentful-delivery-api-token"
+regex = '''(?i)(?:contentful)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{43})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "contentful",
+]
 
 [[rules]]
-	description = "PayPal Braintree access token"
-	regex = '''access_token\$production\$[0-9a-z]{16}\$[0-9a-f]{32}'''
-	tags = ["key", "Paypal"]
+description = "Databricks API token"
+id = "databricks-api-token"
+regex = '''(?i)\b(dapi[a-h0-9]{32})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+tags = [
+  "dapi",
+]
 
 [[rules]]
-	description = "Picatic API key"
-	regex = '''sk_live_[0-9a-z]{32}'''
-	tags = ["key", "Picatic"]
+description = "Discord API key"
+id = "discord-api-token"
+regex = '''(?i)(?:discord)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-f0-9]{64})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "discord",
+]
 
 [[rules]]
-	description = "SendGrid API Key"
-	regex = '''SG\.[\w_]{16,32}\.[\w_]{16,64}'''
-	tags = ["key", "SendGrid"]
+description = "Discord client ID"
+id = "discord-client-id"
+regex = '''(?i)(?:discord)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([0-9]{18})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "discord",
+]
 
 [[rules]]
-	description = "Slack Webhook"
-	regex = '''https://hooks.slack.com/services/T[a-zA-Z0-9_]{8}/B[a-zA-Z0-9_]{8}/[a-zA-Z0-9_]{24}'''
-	tags = ["key", "slack"]
+description = "Discord client secret"
+id = "discord-client-secret"
+regex = '''(?i)(?:discord)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{32})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "discord",
+]
 
 [[rules]]
-	description = "Stripe API key"
-	regex = '''(?i)stripe(.{0,20})?[sr]k_live_[0-9a-zA-Z]{24}'''
-	tags = ["key", "Stripe"]
+description = "Dropbox API secret"
+id = "doppler-api-token"
+regex = '''(?i)(?:dropbox)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-z0-9]{15})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "dropbox",
+]
 
 [[rules]]
-	description = "Square access token"
-	regex = '''sq0atp-[0-9A-Za-z\-_]{22}'''
-	tags = ["key", "square"]
+description = "Dropbox long lived API token"
+id = "dropbox-long-lived-api-token"
+regex = '''(?i)(?:dropbox)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-z0-9]{11}(AAAAAAAAAA)[a-z0-9\-_=]{43})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+tags = [
+  "dropbox",
+]
 
 [[rules]]
-	description = "Square OAuth secret"
-	regex = '''sq0csp-[0-9A-Za-z\\-_]{43}'''
-	tags = ["key", "square"]
+description = "Dropbox short lived API token"
+id = "dropbox-short-lived-api-token"
+regex = '''(?i)(?:dropbox)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}(sl\.[a-z0-9\-=_]{135})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+tags = [
+  "dropbox",
+]
 
 [[rules]]
-	description = "Twilio API key"
-	regex = '''(?i)twilio(.{0,20})?SK[0-9a-f]{32}'''
-	tags = ["key", "twilio"]
+description = "Doppler API token"
+id = "doppler-api-token"
+regex = '''(dp\.pt\.)(?i)[a-z0-9]{43}'''
+tags = [
+  "doppler",
+]
 
-# The following rules check for credentials assigned to variables that its value has an entropy of more than 3 bits.
-# To achieve this there's a regexp for each language. The regexp checks for a variable with a suspicious name followed
+[[rules]]
+description = "Duffel API token"
+id = "duffel-api-token"
+regex = '''duffel_(test|live)_(?i)[a-z0-9_\-=]{43}'''
+tags = [
+  "duffel",
+]
+
+[[rules]]
+description = "Dynatrace API token"
+id = "dynatrace-api-token"
+regex = '''dt0c01\.(?i)[a-z0-9]{24}\.[a-z0-9]{64}'''
+tags = [
+  "dynatrace",
+]
+
+[[rules]]
+description = "EasyPost API token"
+id = "easypost-api-token"
+regex = '''EZAK(?i)[a-z0-9]{54}'''
+tags = [
+  "ezak",
+]
+
+[[rules]]
+description = "EasyPost test API token"
+id = "easypost-test-api-token"
+regex = '''EZTK(?i)[a-z0-9]{54}'''
+tags = [
+  "eztk",
+]
+
+[[rules]]
+description = "facebook"
+id = "facebook"
+regex = '''(?i)(?:facebook)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-f0-9]{32})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "facebook",
+]
+
+[[rules]]
+description = "Fastly API key"
+id = "fastly-api-token"
+regex = '''(?i)(?:fastly)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{32})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "fastly",
+]
+
+[[rules]]
+description = "Finicity Client Secret"
+id = "finicity-client-secret"
+regex = '''(?i)(?:finicity)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-z0-9]{20})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "finicity",
+]
+
+[[rules]]
+description = "Finicity API token"
+id = "finicity-api-token"
+regex = '''(?i)(?:finicity)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-f0-9]{32})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "finicity",
+]
+
+[[rules]]
+description = "Finicity Public Key"
+id = "flutterwave-public-key"
+regex = '''FLWPUBK_TEST-(?i)[a-h0-9]{32}-X'''
+tags = [
+  "flwpubk_test",
+]
+
+[[rules]]
+description = "Finicity Secret Key"
+id = "flutterwave-public-key"
+regex = '''FLWSECK_TEST-(?i)[a-h0-9]{32}-X'''
+tags = [
+  "flwseck_test",
+]
+
+[[rules]]
+description = "Finicity Secret Key"
+id = "flutterwave-public-key"
+regex = '''FLWSECK_TEST-(?i)[a-h0-9]{32}-X'''
+tags = [
+  "flwseck_test",
+]
+
+[[rules]]
+description = "Frame.io API token"
+id = "frameio-api-token"
+regex = '''fio-u-(?i)[a-z0-9\-_=]{64}'''
+tags = [
+  "fio-u-",
+]
+
+[[rules]]
+description = "GoCardless API token"
+id = "gocardless-api-token"
+regex = '''(?i)(?:gocardless)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}(live_(?i)[a-z0-9\-_=]{40})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "live_",
+  "gocardless",
+]
+
+[[rules]]
+description = "GitHub Personal Access Token"
+id = "github-pat"
+regex = '''ghp_[0-9a-zA-Z]{36}'''
+tags = [
+  "ghp_",
+]
+
+[[rules]]
+description = "GitHub OAuth Access Token"
+id = "github-oauth"
+regex = '''gho_[0-9a-zA-Z]{36}'''
+tags = [
+  "gho_",
+]
+
+[[rules]]
+description = "GitHub App Token"
+id = "github-app-token"
+regex = '''(ghu|ghs)_[0-9a-zA-Z]{36}'''
+tags = [
+  "ghu_",
+  "ghs_",
+]
+
+[[rules]]
+description = "GitHub Refresh Token"
+id = "github-refresh-token"
+regex = '''ghr_[0-9a-zA-Z]{36}'''
+tags = [
+  "ghr_",
+]
+
+[[rules]]
+description = "Gitlab Personal Access Token"
+id = "gitlab-pat"
+regex = '''glpat-[0-9a-zA-Z\-\_]{20}'''
+tags = [
+  "glpat-",
+]
+
+[[rules]]
+description = "HashiCorp Terraform user/org API token"
+id = "hashicorp-tf-api-token"
+regex = '''(?i)[a-z0-9]{14}\.atlasv1\.[a-z0-9\-_=]{60,70}'''
+tags = [
+  "atlasv1",
+]
+
+[[rules]]
+description = "Heroku API Key"
+id = "heroku-api-key"
+regex = '''(?i)(?:heroku)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "heroku",
+]
+
+[[rules]]
+description = "HubSpot API Token"
+id = "hubspot-api-key"
+regex = '''(?i)(?:hubspot)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "hubspot",
+]
+
+[[rules]]
+description = "Intercom API Token"
+id = "intercom-api-key"
+regex = '''(?i)(?:intercom)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{60})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "intercom",
+]
+
+[[rules]]
+description = "Linear API Token"
+id = "linear-api-key"
+regex = '''lin_api_(?i)[a-z0-9]{40}'''
+tags = [
+  "lin_api_",
+]
+
+[[rules]]
+description = "Linear Client Secret"
+id = "linear-client-secret"
+regex = '''(?i)(?:linear)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-f0-9]{32})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "linear",
+]
+
+[[rules]]
+description = "LinkedIn Client ID"
+id = "linkedin-client-id"
+regex = '''(?i)(?:linkedin|linked-in)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-z0-9]{14})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "linkedin",
+  "linked-in",
+]
+
+[[rules]]
+description = "LinkedIn Client secret"
+id = "linkedin-client-secret"
+regex = '''(?i)(?:linkedin|linked-in)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-z0-9]{16})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "linkedin",
+  "linked-in",
+]
+
+[[rules]]
+description = "Lob API Key"
+id = "lob-api-key"
+regex = '''(?i)(?:lob)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}((live|test)_[a-f0-9]{35})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "test_",
+  "live_",
+]
+
+[[rules]]
+description = "Lob Publishable API Key"
+id = "lob-pub-api-key"
+regex = '''(?i)(?:lob)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}((test|live)_pub_[a-f0-9]{31})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "test_pub",
+  "live_pub",
+  "_pub",
+]
+
+[[rules]]
+description = "Mailchimp API key"
+id = "mailchimp-api-key"
+regex = '''(?i)(?:mailchimp)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-f0-9]{32}-us20)(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "mailchimp",
+]
+
+[[rules]]
+description = "Mailgun public validation key"
+id = "mailgun-pub-key"
+regex = '''(?i)(?:mailgun)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}(pubkey-[a-f0-9]{32})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "mailgun",
+]
+
+[[rules]]
+description = "Mailgun private API token"
+id = "mailgun-private-api-token"
+regex = '''(?i)(?:mailgun)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}(key-[a-f0-9]{32})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "mailgun",
+]
+
+[[rules]]
+description = "Mailgun webhook signing key"
+id = "mailgun-signing-key"
+regex = '''(?i)(?:mailgun)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-h0-9]{32}-[a-h0-9]{8}-[a-h0-9]{8})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "mailgun",
+]
+
+[[rules]]
+description = "MapBox API token"
+id = "mapbox-api-token"
+regex = '''(?i)(?:mapbox)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}(pk\.[a-z0-9]{60}\.[a-z0-9]{22})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "mapbox",
+]
+
+[[rules]]
+description = "MessageBird API token"
+id = "messagebird-api-token"
+regex = '''(?i)(?:messagebird|message-bird|message_bird)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-z0-9]{25})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "messagebird",
+  "message-bird",
+  "message_bird",
+]
+
+[[rules]]
+description = "MessageBird client ID"
+id = "messagebird-client-id"
+regex = '''(?i)(?:messagebird|message-bird|message_bird)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-h0-9]{8}-[a-h0-9]{4}-[a-h0-9]{4}-[a-h0-9]{4}-[a-h0-9]{12})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "messagebird",
+  "message-bird",
+  "message_bird",
+]
+
+[[rules]]
+description = "New Relic user API Key"
+id = "new-relic-user-api-key"
+regex = '''(?i)(?:new-relic|newrelic|new_relic)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}(NRAK-[a-z0-9]{27})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "nrak",
+]
+
+[[rules]]
+description = "New Relic user API ID"
+id = "new-relic-user-api-id"
+regex = '''(?i)(?:new-relic|newrelic|new_relic)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-z0-9]{64})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "new-relic",
+  "newrelic",
+  "new_relic",
+]
+
+[[rules]]
+description = "New Relic ingest browser API token"
+id = "new-relic-browser-api-token"
+regex = '''(?i)(?:new-relic|newrelic|new_relic)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}(NRJS-[a-f0-9]{19})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "nrjs-",
+]
+
+[[rules]]
+description = "npm access token"
+id = "npm-access-token"
+regex = '''(?i)\b(npm_[a-z0-9]{36})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "npm_",
+]
+
+[[rules]]
+description = "PlanetScale password"
+id = "planetscale-password"
+regex = '''(?i)\b(pscale_pw_(?i)[a-z0-9=\-_\.]{43})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "pscale_pw_",
+]
+
+[[rules]]
+description = "PlanetScale API token"
+id = "planetscale-api-token"
+regex = '''(?i)\b(pscale_tkn_(?i)[a-z0-9=\-_\.]{43})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "pscale_tkn_",
+]
+
+[[rules]]
+description = "Postman API token"
+id = "postman-api-token"
+regex = '''(?i)\b(PMAK-(?i)[a-f0-9]{24}\-[a-f0-9]{34})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "pmak-",
+]
+
+[[rules]]
+description = "Private Key"
+id = "private-key"
+regex = '''(?i)-----BEGIN[ A-Z0-9_-]{0,100}PRIVATE KEY-----[\s\S-]*KEY----'''
+tags = [
+  "-----begin",
+]
+
+[[rules]]
+description = "Pulumi API token"
+id = "pulumi-api-token"
+regex = '''(?i)\b(pul-[a-f0-9]{40})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "pul-",
+]
+
+[[rules]]
+description = "PyPI upload token"
+id = "pypi-upload-token"
+regex = '''pypi-AgEIcHlwaS5vcmc[A-Za-z0-9\-_]{50,1000}'''
+tags = [
+  "pypi-ageichlwas5vcmc",
+]
+
+[[rules]]
+description = "Rubygem API token"
+id = "rubygems-api-token"
+regex = '''(?i)\b(rubygems_[a-f0-9]{48})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "rubygems_",
+]
+
+[[rules]]
+description = "SendGrid API token"
+id = "sendgrid-api-token"
+regex = '''(?i)\b(SG\.(?i)[a-z0-9=_\-\.]{66})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "sg.",
+]
+
+[[rules]]
+description = "Sendinblue API token"
+id = "sendinblue-api-token"
+regex = '''(?i)\b(xkeysib-[a-f0-9]{64}\-(?i)[a-z0-9]{16})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "xkeysib-",
+]
+
+[[rules]]
+description = "Shippo API token"
+id = "shippo-api-token"
+regex = '''(?i)\b(shippo_(live|test)_[a-f0-9]{40})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "shippo_",
+]
+
+[[rules]]
+description = "Shopify access token"
+id = "shopify-access-token"
+regex = '''shpat_[a-fA-F0-9]{32}'''
+tags = [
+  "shpat_",
+]
+
+[[rules]]
+description = "Shopify custom access token"
+id = "shopify-custom-access-token"
+regex = '''shpca_[a-fA-F0-9]{32}'''
+tags = [
+  "shpca_",
+]
+
+[[rules]]
+description = "Shopify private app access token"
+id = "shopify-private-app-access-token"
+regex = '''shppa_[a-fA-F0-9]{32}'''
+tags = [
+  "shppa_",
+]
+
+[[rules]]
+description = "Shopify shared secret"
+id = "shopify-shared-secret"
+regex = '''shpss_[a-fA-F0-9]{32}'''
+tags = [
+  "shpss_",
+]
+
+[[rules]]
+description = "Slack token"
+id = "slack-access-token"
+regex = '''xox[baprs]-([0-9a-zA-Z]{10,48})'''
+tags = [
+  "xoxb",
+  "xoxa",
+  "xoxp",
+  "xoxr",
+  "xoxs",
+]
+
+[[rules]]
+description = "Slack Webhook"
+id = "slack-web-hook"
+regex = '''https:\/\/hooks.slack.com\/services\/[A-Za-z0-9+\/]{44,46}'''
+tags = [
+  "hooks.slack.com",
+]
+
+[[rules]]
+description = "Stripe"
+id = "stripe-access-token"
+regex = '''(?i)(sk|pk)_(test|live)_[0-9a-z]{10,32}'''
+tags = [
+  "sk_test",
+  "pk_test",
+  "sk_live",
+  "pk_live",
+]
+
+[[rules]]
+description = "Twilio API Key"
+id = "twilio-api-key"
+regex = '''SK[0-9a-fA-F]{32}'''
+tags = [
+  "twilio",
+]
+
+[[rules]]
+description = "Twitch API token"
+id = "twitch-api-token"
+regex = '''(?i)(?:twitch)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-z0-9]{30})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "twitch",
+]
+
+[[rules]]
+description = "twitter"
+id = "twitter"
+regex = '''(?i)(?:twitter)(?:[0-9a-z\-_\s.]{0,20})(?:[\s|\x27]|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:\x27|\"|\s|=|\x60){0,5}([a-f0-9]{35,44})(?:[\x27|\"|\n|\r|\s|\x60]|$)'''
+secretGroup = 1
+tags = [
+  "twitter",
+]
+
+[[rules]]
+description = "Typeform API token"
+id = "typeform-api-token"
+regex = '''(?i)tfp_[a-zA-Z1-9]{40,50}_[a-zA-Z1-9]{8,16}'''
+tags = [
+  "typeform",
+]
+
+[[rules]]
+description = "Authorization Bearer tokens"
+id = "authorization-bearer-token"
+regex = '''(?i)Bearer(?:\s)+(\S{8,})'''
+secretGroup = 1
+entropy = 3.8
+tags = [
+  "key",
+  "HTTP",
+  "bearer"
+]
+
+# The following rules look for credentials assigned to variables that its value has an entropy of more than 3 bits.
+# To achieve this there\x27s a regexp for each language. The regexp checks for a variable with a suspicious name followed
 # by a value assignation (for example, := in Go, = in JS, etc.). Then, looks for a group of non-space characters enclosed
 # between quotes. If that group has an entropy higher than 3 bits the rule will trigger.
 
 [[rules]]
-	description = "Hardcoded credentials in Go files"
-	file = '''^(.*?)\.go$'''
-	regex = '''(?i)(?:secret|key|signature|password|pwd|pass|token)(?:\w|\s*?)(?:=|:=)(?:\s*?)[\"'`](.{4,120}?)[\"'`]'''
-	tags = ["credentials", "hardcoded", "go"]
-	[[rules.Entropies]]
-		Min = "3"
-		Max = "7"
-		Group = "1"
+description = "Hardcoded credentials in Go files"
+id = "credentials-go"
+path = '''(.*?)\.go$'''
+regex = '''(?i)(?:secret|key|password|pwd|pass|token)(?:\w|\s*?)(?:=|:=)(?:\s*?)[\"\x27\x60](.{4,120}?)[\"\x27\x60]'''
+secretGroup = 1
+entropy = 3
+tags = [
+  "credentials",
+  "hardcoded",
+  "go",
+]
 
 [[rules]]
-	description = "Hardcoded credentials in JavaScript or TypeScript files"
-	file = '''^(.*?)\.(?:j|t)s$'''
-	regex = '''(?i)(?:secret|key|signature|password|pwd|pass|token)(?:\w|\s*?)(?:=){1}(?:\s{0,10})[\"'`](.*?)[\"'`]'''
-	tags = ["credentials", "hardcoded", "js"]
-	[[rules.Entropies]]
-		Min = "3"
-		Max = "7"
-		Group = "1"
+description = "Hardcoded credentials in JavaScript or TypeScript files"
+id = "credentials-javascript"
+path = '''(.*?)\.(?:j|t)s$'''
+regex = '''(?i)(?:secret|key|password|pwd|pass|token)(?:\w|\s*?)(?:=){1}(?:\s{0,10})[\"\x27`](.*?)[\"\x27`]'''
+secretGroup = 1
+entropy = 3
+tags = [
+  "credentials",
+  "hardcoded",
+  "js",
+]
 
 [[rules]]
-	description = "Hardcoded credentials in PHP files"
-	file = '''^(.*?)\.php$'''
-	regex = '''(?i)(?:secret|key|signature|password|pwd|pass|token)(?:.{0,20})(?:=){1}(?:.{0,10})[\"'`](.{4,120})[\"'`]'''
-	tags = ["credentials", "hardcoded", "php"]
-	[[rules.Entropies]]
-		Min = "3"
-		Max = "7"
-		Group = "1"
+description = "Hardcoded credentials in PHP files"
+id = "credentials-php"
+path = '''(.*?)\.php$'''
+regex = '''(?i)(?:secret|key|password|pwd|pass|token)(?:.{0,20})(?:=){1}(?:.{0,10})[\"\x27`](.{4,120})[\"\x27`]'''
+secretGroup = 1
+entropy = 3
+tags = [
+  "credentials",
+  "hardcoded",
+  "php",
+]
 
 [[rules]]
-	description = "Hardcoded credentials in YAML files as quoted strings"
-	file = '''^(.*?)\.y(a|)ml$'''
-	regex = '''(?i)(?:secret|key|signature|password|pwd|pass|token)(?:.{0,20})(?::){1}(?:\s{0,10})(?:[\"'](.{4,120})[\"'])'''
-	tags = ["credentials", "hardcoded", "yaml"]
-	[[rules.Entropies]]
-		Min = "3"
-		Max = "7"
-		Group = "1"
-	[rules.allowlist]
-		description = "Skip YAML Serverless variables, grabbed and concated values, encrypted secrets, and values with jinja2 placeholders"
-		regexes = ['''\${(?:.)+}''', '''(?i)\(\((?:\s)*?(?:grab|concat)(?:.)*?(?:\s)*?\)\)''', '''(?i)!!enveloped:(?:\S)+''', '''(?:.)*?{{(?:.)*?}}''']
+description = "Hardcoded credentials in YAML files as quoted strings"
+id = "credentials-yaml-quoted"
+path = '''(.*?)\.y(a|)ml$'''
+regex = '''(?i)(?:secret|key|password|pwd|pass|token)(?:.{0,20})(?::){1}(?:\s{0,10})(?:[\"\x27](.{4,120})[\"\x27])'''
+secretGroup = 1
+entropy = 3
+tags = [
+  "credentials",
+  "hardcoded",
+  "yaml",
+]
+[rules.allowlist]
+description = "Skip YAML Serverless variables, grabbed and concatenated values, encrypted secrets, and values with jinja2 placeholders"
+regexes = [
+  '''\${(?:.)+}''', # Serverless variables
+  '''(?i)\(\((?:\s)*?(?:grab|concat)(?:.)*?(?:\s)*?\)\)''', # Grabbed and concatenated values
+  '''(?i)!!enveloped:''', # Encrypted secretes
+  '''(?:.)*?{{(?:.)*?}}''', # jinja2 placeholders
+]
 
 [[rules]]
-	description = "Hardcoded credentials in YAML files as unquoted strings"
-	file = '''^(.*?)\.y(a|)ml$'''
-	regex = '''(?i)(?:secret|key|signature|password|pwd|pass|token)(?:.{0,20})(?::){1}(?:\s{0,10})(\S{4,120})'''
-	tags = ["credentials", "hardcoded", "yaml"]
-	[[rules.Entropies]]
-		Min = "3.5" # A higher entropy is required for this type of match, as unquoted can trigger many false positives
-		Max = "7"
-		Group = "1"
-	[rules.allowlist]
-		description = "Skip YAML Serverless variables, grabbed and concated values, encrypted secrets, and values with jinja2 placeholders"
-		regexes = ['''\${(?:.)+}''', '''(?i)\(\((?:\s)*?(?:grab|concat)(?:.)*?(?:\s)*?\)\)''', '''(?i)!!enveloped:(?:\S)+''', '''(?:.)*?{{(?:.)*?}}''']
+description = "Hardcoded credentials in YAML files as unquoted strings"
+id = "credentials-yaml-unquoted"
+path = '''(.*?)\.y(a|)ml$'''
+#regex = '''(?i)(?:secret|key|password|pwd|pass|token)(?:\w|\s*?)(?::){1}(?:\s*?)((?:\w|\S)+)(?:|(?:\s*?#.*))$'''
+regex = '''(?i)(?:secret|key|password|pwd|pass|token)(?:\w|\s*?)(?::){1}(?:\s*?)((?:\w|\S)+)'''
+secretGroup = 1
+entropy = 3.5 # A higher entropy is required for this type of match, as unquoted can trigger many false positives
+tags = [
+  "credentials",
+  "hardcoded",
+  "yaml",
+]
+[rules.allowlist]
+description = "Skip YAML Serverless variables, grabbed and concated values, encrypted secrets, and values with jinja2 placeholders"
+regexes = [
+  ''':$''', # It's a YAML key (as in key: value)
+  '''\${(?:.)+}''', # Serverless variables
+  '''(?i)\(\((?:\s)*?(?:grab|concat)(?:.)*?(?:\s)*?\)\)''', # Grabbed and concatenated values
+  '''(?i)!!enveloped:''', # Encrypted secretes
+  '''(?:.)*?{{(?:.)*?}}''', # jinja2 placeholders
+  '''={{$''', # jinja2 variable assignation
+]
 
 [[rules]]
-	description = "Hardcoded credentials in YAML files as multiline strings"
-	file = '''^(.*?)\.y(a|)ml$'''
-	regex = '''(?i)(?:secret|key|signature|password|pwd|pass|token)(?:.{0,20})(?::){1}(?:\s{0,10})(?:\|(?:-|))\n(?:\s{0,10})(\S{4,120})'''
-	tags = ["credentials", "hardcoded", "yaml"]
-	[[rules.Entropies]]
-		Min = "4"
-		Max = "7"
-		Group = "1"
+description = "Hardcoded credentials in YAML files as multiline strings"
+id = "credentials-yaml-multiline"
+path = '''(.*?)\.y(a|)ml$'''
+regex = '''(?i)(?:secret|key|password|pwd|pass|token)(?:.{0,20})(?::){1}(?:\s{0,10})(?:\|(?:-|))\n(?:\s{0,10})(\S{4,120})'''
+secretGroup = 1
+entropy = 4
+tags = [
+  "credentials",
+  "hardcoded",
+  "yaml",
+]
 
 [[rules]]
-	description = "Hardcoded credentials in HCL files (*.tf)"
-	file = '''^(.*?)\.tf$'''
-	regex = '''(?i)(?:secret|key|signature|password|pwd|pass|token)(?:.{0,20})(?:=){1}(?:\s)*?"(.{4,120})"'''
-	tags = ["credentials", "hardcoded", "hcl"]
-	[[rules.Entropies]]
-		Min = "3"
-		Max = "7"
-		Group = "1"
-	[rules.allowlist]
-		description = "Skip variable substitution"
-		regexes = ['''\${(?:.)*?}''']
+description = "Hardcoded credentials in HCL files (*.tf)"
+id = "credentials-terraform"
+path = '''(.*?)\.tf$'''
+regex = '''(?i)(?:secret|key|password|pwd|pass|token)(?:.{0,20})(?:=){1}(?:\s)*?"(.{4,120})"'''
+secretGroup = 1
+entropy = 3
+tags = [
+  "credentials",
+  "hardcoded",
+  "hcl",
+]
+[rules.allowlist]
+description = "Skip variable substitution"
+regexes = [
+  '''\${(?:.)*?}''',
+]
+
+[[rules]]
+description = "Hardcoded credentials in Python files (*.py)"
+id = "credentials-python"
+path = '''(.*?)\.py$'''
+regex = '''(?i)(?:secret|key|password|pwd|pass|token)(?:.{0,20})(?:=){1}(?:\s)*?["\x27](.{4,120})["\x27]'''
+secretGroup = 1
+entropy = 3
+tags = [
+  "credentials",
+  "hardcoded",
+  "hcl",
+]

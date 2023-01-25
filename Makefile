@@ -1,16 +1,19 @@
-IMAGE_NAME := "quay.io/typeform/gitleaks-config"
+IMAGE_NAME := ${CONTAINER_REGISTRY}/gitleaks-config
 RELEASE_TAG ?= dev
 
 all: build run
 
 build:
-	docker build -t $(IMAGE_NAME):${RELEASE_TAG} -t $(IMAGE_NAME):latest .
+	docker build \
+		-t $(IMAGE_NAME):${RELEASE_TAG} \
+		-t $(IMAGE_NAME):latest \
+		.
 
 run:
 	docker container run --rm -v ${PWD}/.gitleaks.toml:/app/.gitleaks.toml \
 		$(IMAGE_NAME):${RELEASE_TAG}
 
-test-config-generator: build
+test-config-generator:
 	docker container run --rm -v ${PWD}/test/local-config.toml:/app/local-config.toml \
 		-v ${PWD}/test/local-config-old.toml:/app/local-config-old.toml \
 		$(IMAGE_NAME):${RELEASE_TAG} \
@@ -21,8 +24,19 @@ test-gitleaks-config:
 
 test: test-config-generator test-gitleaks-config
 
-push:
+push: build
 	docker push $(IMAGE_NAME):${RELEASE_TAG}
 
-push-latest:
+push-latest: build
+	docker push $(IMAGE_NAME):latest
+
+# Temporary until SP-1665 is done
+push-quay: IMAGE_NAME=quay.io/typeform/gitleaks-config
+push-quay: build
+	docker login -u=${DOCKER_USERNAME} -p=${DOCKER_PASSWORD} ${CONTAINER_REGISTRY} quay.io
+	docker push $(IMAGE_NAME):${RELEASE_TAG}
+
+push-latest-quay: IMAGE_NAME=quay.io/typeform/gitleaks-config
+push-latest-quay: build
+	docker login -u=${DOCKER_USERNAME} -p=${DOCKER_PASSWORD} ${CONTAINER_REGISTRY} quay.io
 	docker push $(IMAGE_NAME):latest
