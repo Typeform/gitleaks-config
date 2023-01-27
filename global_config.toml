@@ -780,7 +780,7 @@ tags = [
 description = "Hardcoded credentials in Go files"
 id = "credentials-go"
 path = '''(.*?)\.go$'''
-regex = '''(?i)(?:secret|key|password|pwd|pass|token)(?:\w|\s*?)(?:=|:=)(?:\s*?)[\"\x27\x60](.{4,120}?)[\"\x27\x60]'''
+regex = '''(?i)(?:[\w\.]*)(?:secret|key|password|pwd|pass|token)(?:[\w\.]*)(?:=|:=)(?:\s*?)[\"\x27\x60](.{4,120}?)[\"\x27\x60]'''
 secretGroup = 1
 entropy = 3
 tags = [
@@ -793,7 +793,7 @@ tags = [
 description = "Hardcoded credentials in JavaScript or TypeScript files"
 id = "credentials-javascript"
 path = '''(.*?)\.(?:j|t)s$'''
-regex = '''(?i)(?:secret|key|password|pwd|pass|token)(?:\w|\s*?)(?:=){1}(?:\s{0,10})[\"\x27`](.*?)[\"\x27`]'''
+regex = '''(?i)(?:[\w\.]*)(?:secret|key|password|pwd|pass|token)(?:[\w\.]*)(?:=){1}(?:\s{0,10})[\"\x27`](.*?)[\"\x27`]'''
 secretGroup = 1
 entropy = 3
 tags = [
@@ -806,7 +806,7 @@ tags = [
 description = "Hardcoded credentials in PHP files"
 id = "credentials-php"
 path = '''(.*?)\.php$'''
-regex = '''(?i)(?:secret|key|password|pwd|pass|token)(?:.{0,20})(?:=){1}(?:.{0,10})[\"\x27`](.{4,120})[\"\x27`]'''
+regex = '''(?i)(?:[\w\.]*)(?:secret|key|password|pwd|pass|token)(?:[\w\.]*)(?:=){1}(?:.{0,10})[\"\x27`](.{4,120})[\"\x27`]'''
 secretGroup = 1
 entropy = 3
 tags = [
@@ -819,7 +819,7 @@ tags = [
 description = "Hardcoded credentials in YAML files as quoted strings"
 id = "credentials-yaml-quoted"
 path = '''(.*?)\.y(a|)ml$'''
-regex = '''(?i)(?:secret|key|password|pwd|pass|token)(?:.{0,20})(?::){1}(?:\s{0,10})(?:[\"\x27](.{4,120})[\"\x27])'''
+regex = '''(?i)(?:[\w\.-]*)(?:secret|key|password|pwd|pass|token)(?:[\w\.-]*)(?::){1}(?:\s{0,10})(?:[\"\x27](.{4,120})[\"\x27])'''
 secretGroup = 1
 entropy = 3
 tags = [
@@ -840,8 +840,7 @@ regexes = [
 description = "Hardcoded credentials in YAML files as unquoted strings"
 id = "credentials-yaml-unquoted"
 path = '''(.*?)\.y(a|)ml$'''
-#regex = '''(?i)(?:secret|key|password|pwd|pass|token)(?:\w|\s*?)(?::){1}(?:\s*?)((?:\w|\S)+)(?:|(?:\s*?#.*))$'''
-regex = '''(?i)(?:secret|key|password|pwd|pass|token)(?:\w|\s*?)(?::){1}(?:\s*?)((?:\w|\S)+)'''
+regex = '''(?i)(?:[\w\.-]*)(?:secret|key|password|pwd|pass|token)(?:[\w\.-]*)(?::){1}(?:\s*?)((?:\w|\S)+)'''
 secretGroup = 1
 entropy = 3.5 # A higher entropy is required for this type of match, as unquoted can trigger many false positives
 tags = [
@@ -864,7 +863,7 @@ regexes = [
 description = "Hardcoded credentials in YAML files as multiline strings"
 id = "credentials-yaml-multiline"
 path = '''(.*?)\.y(a|)ml$'''
-regex = '''(?i)(?:secret|key|password|pwd|pass|token)(?:.{0,20})(?::){1}(?:\s{0,10})(?:\|(?:-|))\n(?:\s{0,10})(\S{4,120})'''
+regex = '''(?i)(?:[\w\.-]*)(?:secret|key|password|pwd|pass|token)(?:[\w\.-]*)(?::){1}(?:\s{0,10})(?:\|(?:-|))\n(?:\s{0,10})(\S{4,120})'''
 secretGroup = 1
 entropy = 4
 tags = [
@@ -877,7 +876,7 @@ tags = [
 description = "Hardcoded credentials in HCL files (*.tf)"
 id = "credentials-terraform"
 path = '''(.*?)\.tf$'''
-regex = '''(?i)(?:secret|key|password|pwd|pass|token)(?:.{0,20})(?:=){1}(?:\s)*?"(.{4,120})"'''
+regex = '''(?i)(?:[\w\.-]*)(?:secret|key|password|pwd|pass|token)(?:[\w\.-]*)(?:=){1}(?:\s)*?"(.{4,120})"'''
 secretGroup = 1
 entropy = 3
 tags = [
@@ -895,7 +894,7 @@ regexes = [
 description = "Hardcoded credentials in Python files (*.py)"
 id = "credentials-python"
 path = '''(.*?)\.py$'''
-regex = '''(?i)(?:secret|key|password|pwd|pass|token)(?:.{0,20})(?:=){1}(?:\s)*?["\x27](.{4,120})["\x27]'''
+regex = '''(?i)(?:[\w\.]*)(?:secret|key|password|pwd|pass|token)(?:[\w\.]*)(?:=){1}(?:\s)*?["\x27](.{4,120})["\x27]'''
 secretGroup = 1
 entropy = 3
 tags = [
