@@ -40,3 +40,8 @@ push-latest-quay: IMAGE_NAME=quay.io/typeform/gitleaks-config
 push-latest-quay: build
 	docker login -u=${DOCKER_USERNAME} -p=${DOCKER_PASSWORD} ${CONTAINER_REGISTRY} quay.io
 	docker push $(IMAGE_NAME):latest
+
+build-public-ecr: build
+
+push-public-ecr:
+	docker push $(IMAGE_NAME):${IMAGE_TAG}

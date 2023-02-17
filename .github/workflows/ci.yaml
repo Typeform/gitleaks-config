@@ -13,8 +13,8 @@ env:
 
 jobs:
   build:
-    name: Run tests and build
-    runs-on: [self-hosted, bear-ephemeral]
+    name: Run tests, build, and publish if needed
+    runs-on: ubuntu-latest
 
     steps:
 
