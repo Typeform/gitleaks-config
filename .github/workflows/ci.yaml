@@ -60,7 +60,7 @@ jobs:
         if: steps.semantic.outputs.new-release-published == 'true'
         run: make push
         env:
-          RELEASE_TAG: ${{ steps.semantic.outputs.release-version }}
+          IMAGE_TAG: ${{ steps.semantic.outputs.release-version }}
           CONTAINER_REGISTRY: ${{ secrets.ECR_REGISTRY }}
 
       - name: Push latest-tagged image
@@ -74,7 +74,7 @@ jobs:
         if: steps.semantic.outputs.new-release-published == 'true'
         run: make push-quay
         env:
-          RELEASE_TAG: ${{ steps.semantic.outputs.release-version }}
+          IMAGE_TAG: ${{ steps.semantic.outputs.release-version }}
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
