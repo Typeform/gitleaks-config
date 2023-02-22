@@ -42,9 +42,9 @@ push-latest-quay: build
 	docker login -u=${DOCKER_USERNAME} -p=${DOCKER_PASSWORD} ${CONTAINER_REGISTRY} quay.io
 	docker push $(IMAGE_NAME):latest
 
-build-public-ecr: IMAGE_NAME=PUBLIC_ECR_IMAGE_NAME
+build-public-ecr: IMAGE_NAME=$(PUBLIC_ECR_IMAGE_NAME)
 build-public-ecr: build
 
-push-public-ecr: IMAGE_NAME=PUBLIC_ECR_IMAGE_NAME
+push-public-ecr: IMAGE_NAME=$(PUBLIC_ECR_IMAGE_NAME)
 push-public-ecr:
 	docker push $(IMAGE_NAME):${IMAGE_TAG}
