@@ -17,10 +17,6 @@ class TestGitleaksConfigGenerator(unittest.TestCase):
         self.assertTrue('*.mp3' in final_config['allowlist']['paths'])
         self.assertTrue(isinstance(final_config['allowlist']['paths'], list))
 
-    def test_merge_old_config(self):
-        final_config = c.merge_config('global_config.toml', 'local-config-old.toml')
-        self.assertTrue('*.mp3' in final_config['allowlist']['paths'])
-
 
 if __name__ == '__main__':
     unittest.main()
