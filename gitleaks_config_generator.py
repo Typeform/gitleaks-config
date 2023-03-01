@@ -15,9 +15,7 @@ import tomlkit
 
 
 def main():
-    config_file = 'global_config_legacy.toml' # config file for gitleaks versions previous to v8
-    if '--v8-config' in sys.argv:
-        config_file = 'global_config.toml'
+    config_file = 'global_config.toml'
 
     final_config = get_final_config(config_file, '.gitleaks.toml')
     print(tomlkit.dumps(final_config))
@@ -37,34 +35,15 @@ def merge_config(global_config_path, local_config_path):
     repo_config = open_toml(local_config_path)
     final_config = copy.deepcopy(global_config)
 
-    # Temporary backwards compatibility with gitleaks v7 until all repos
-    # have updated their .gitleaks.toml files
-    v8_config = False
-    if global_config_path == "global_config.toml":
-        v8_config = True
-
-    # Making the script backwards compatible with local configs that use
-    # the previous config file format
-    if "whitelist" in repo_config:
-        allowlist_key = "whitelist"
-    else:
-        allowlist_key = "allowlist"
-
-    for section, values in repo_config[allowlist_key].items():
+    for section, values in repo_config["allowlist"].items():
         if section == "description":
             continue
 
-        # This will autocorrect .gitleaks.toml files that have a v7 config
-        # file format but requesting a v8 config file format
-        section_key = section
-        if v8_config and section == "files":
-            section_key = "paths"
-
         for value in values:
-            if section_key not in final_config["allowlist"]:
-                final_config["allowlist"][section_key] = [value]
-            elif value not in final_config["allowlist"][section_key]:
-                final_config["allowlist"][section_key].append(value)
+            if section not in final_config["allowlist"]:
+                final_config["allowlist"][section] = [value]
+            elif value not in final_config["allowlist"][section]:
+                final_config["allowlist"][section].append(value)
 
     return final_config
 
