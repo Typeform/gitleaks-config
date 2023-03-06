@@ -1,5 +1,4 @@
-IMAGE_NAME := ${CONTAINER_REGISTRY}/gitleaks-config
-PUBLIC_ECR_IMAGE_NAME := public.ecr.aws/typeform/gitleaks-config
+IMAGE_NAME := public.ecr.aws/typeform/gitleaks-config
 IMAGE_TAG ?= dev
 
 all: build run
@@ -24,26 +23,7 @@ test-gitleaks-config:
 
 test: test-config-generator test-gitleaks-config
 
-push: build
-	docker push $(IMAGE_NAME):${IMAGE_TAG}
-
-push-latest: build
-	docker push $(IMAGE_NAME):latest
-
-# Temporary until SP-1665 is done
-push-quay: IMAGE_NAME=quay.io/typeform/gitleaks-config
-push-quay: build
-	docker login -u=${DOCKER_USERNAME} -p=${DOCKER_PASSWORD} ${CONTAINER_REGISTRY} quay.io
-	docker push $(IMAGE_NAME):${IMAGE_TAG}
-
-push-latest-quay: IMAGE_NAME=quay.io/typeform/gitleaks-config
-push-latest-quay: build
-	docker login -u=${DOCKER_USERNAME} -p=${DOCKER_PASSWORD} ${CONTAINER_REGISTRY} quay.io
-	docker push $(IMAGE_NAME):latest
-
-build-public-ecr: IMAGE_NAME=$(PUBLIC_ECR_IMAGE_NAME)
 build-public-ecr: build
 
-push-public-ecr: IMAGE_NAME=$(PUBLIC_ECR_IMAGE_NAME)
 push-public-ecr:
 	docker push $(IMAGE_NAME):${IMAGE_TAG}

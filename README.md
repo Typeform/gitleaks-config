@@ -1,8 +1,7 @@
 # gitleaks-config
 
 [![Build Status](https://github.com/Typeform/gitleaks-config/actions/workflows/ci.yaml/badge.svg)](https://github.com/Typeform/gitleaks-config/actions/workflows/ci.yaml)
-[![Docker Image](https://img.shields.io/badge/quay.io-docker%20image-blue?logo=docker)](https://quay.io/repository/typeform/gitleaks-config)
-[![Security](https://img.shields.io/badge/slack-%23security__operations-blue.svg?logo=slack)](https://typeform.slack.com/archives/CCWDN8ASJ)
+[![Docker Image](https://img.shields.io/badge/ECR-docker%20image-blue?logo=docker)](https://gallery.ecr.aws/typeform/gitleaks-config)
 
 This repository contains a customized [gitleaks](https://github.com/zricethezav/gitleaks) configuration, a Python script to merge `gitleaks` configurations, and a Dockerfile to combine both things and use it in a CI/CD environment.
 
