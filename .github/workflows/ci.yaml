@@ -48,4 +48,4 @@ jobs:
             ]
           tag_format: '${version}'
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
