@@ -2,7 +2,7 @@
 set -e
 
 GITLEAKS_IMAGE="zricethezav/gitleaks"
-GITLEAKS_VERSION="v8.8.8"
+GITLEAKS_VERSION="v8.16.1"
 
 # Generate configuration
 gitleaks_config="${PWD}/global_config.toml"
