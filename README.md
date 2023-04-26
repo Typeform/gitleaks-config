@@ -51,7 +51,7 @@ A simple example of CI/CD integration would be to run the following Bash code on
 # Merge repo's local config
 final_config="/tmp/gitleaks_config.toml"
 docker container run --rm -v repo_to_be_scanned/.gitleaks.toml:/app/.gitleaks.toml \
-    quay.io/typeform/gitleaks-config > $final_config
+    public.ecr.aws/typeform/gitleaks-config > $final_config
 
 # Run gitleaks with the generated config
 docker container run --rm --name=gitleaks \
