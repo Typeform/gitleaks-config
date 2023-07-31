@@ -27,6 +27,7 @@ paths = [
   '''node_modules\/''', # Ignoring Node dependencies
   '''vendor\/''', # Ignoring Go dependencies
   '''test(|s)\/''', # Ignoring test directories
+  '''catalog-info\.(yaml|yml)''', # Ignoring Developer console configuration files
 ]
 
 # A more precise rule to detect Typeform API tokens
