@@ -112,8 +112,9 @@ description = "Skip YAML Serverless variables, grabbed and concatenated values, 
 regexes = [
   '''\${(?:.)+}''', # Serverless variables
   '''(?i)\(\((?:\s)*?(?:grab|concat)(?:.)*?(?:\s)*?\)\)''', # Grabbed and concatenated values
-  '''(?i)!!enveloped:''', # Encrypted secretes
+  '''(?i)!!enveloped:''', # Encrypted secrets
   '''(?:.)*?{{(?:.)*?}}''', # jinja2 placeholders
+  '''ENC\[AES256_GCM,data:''', # sops secrets
 ]
 
 [[rules]]
@@ -135,9 +136,10 @@ regexes = [
   ''':$''', # It's a YAML key (as in key: value)
   '''\${(?:.)+}''', # Serverless variables
   '''(?i)\(\((?:\s)*?(?:grab|concat)(?:.)*?(?:\s)*?\)\)''', # Grabbed and concatenated values
-  '''(?i)!!enveloped:''', # Encrypted secretes
+  '''(?i)!!enveloped:''', # Encrypted secrets
   '''(?:.)*?{{(?:.)*?}}''', # jinja2 placeholders
   '''={{$''', # jinja2 variable assignation
+  '''ENC\[AES256_GCM,data:''', # sops secrets
 ]
 
 [[rules]]
