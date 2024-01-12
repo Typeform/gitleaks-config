@@ -1,3 +1,4 @@
+<a href=https://engineering-metrics.typeform.tf/standards-adoption-tool/reports/gitleaks-config/><img src=https://api.typeform.com/repositories/gitleaks-config/badges.svg /></a>
 # gitleaks-config
 
 [![Build Status](https://github.com/Typeform/gitleaks-config/actions/workflows/ci.yaml/badge.svg)](https://github.com/Typeform/gitleaks-config/actions/workflows/ci.yaml)
