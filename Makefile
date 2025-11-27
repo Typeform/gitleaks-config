@@ -23,7 +23,31 @@ test-gitleaks-config:
 
 test: test-config-generator test-gitleaks-config
 
-build-public-ecr: build
+build-amd64:
+	docker buildx build \
+		--platform linux/amd64 \
+		-t $(IMAGE_NAME):${IMAGE_TAG}-amd64 \
+		--load \
+		.
 
-push-public-ecr:
-	docker push $(IMAGE_NAME):${IMAGE_TAG}
+build-arm64:
+	docker buildx build \
+		--platform linux/arm64 \
+		-t $(IMAGE_NAME):${IMAGE_TAG}-arm64 \
+		--load \
+		.
+
+build-multiarch-local: build-amd64 build-arm64
+
+push-multiarch:
+	docker buildx build \
+		--platform linux/amd64,linux/arm64 \
+		-t $(IMAGE_NAME):${IMAGE_TAG} \
+		-t $(IMAGE_NAME):latest \
+		--push \
+		.
+
+# Public ECR Jenkins file required targets
+build-public-ecr: build-multiarch-local
+
+push-public-ecr: push-multiarch
